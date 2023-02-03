@@ -2,22 +2,19 @@ import 'dart:convert' as dart_convert;
 
 import 'package:equatable/equatable.dart';
 
-String encodeUserToString(UserModel user) => dart_convert.json.encode(user.toJson());
+String encodeUserToString(UserModel user) =>
+    dart_convert.json.encode(user.toJson());
 
 class UserModel extends Equatable {
   const UserModel({
     required this.id,
-    this.email,
     this.name,
-    required this.isTermsAccepted,
-    required this.phone,
+    required this.email,
   });
 
   final String id;
   final String? email;
   final String? name;
-  final String phone;
-  final bool isTermsAccepted;
 
   @override
   String toString() {
@@ -38,8 +35,6 @@ class UserModel extends Equatable {
       id: id ?? this.id,
       email: email ?? this.email,
       name: name ?? this.name,
-      phone: phone ?? this.phone,
-      isTermsAccepted: isTermsAccepted ?? this.isTermsAccepted,
     );
   }
 
@@ -50,8 +45,6 @@ class UserModel extends Equatable {
       id: json['id'],
       email: json['email'],
       name: json['name'],
-      phone: json['phone'],
-      isTermsAccepted: json['is_terms_accepted'],
     );
   }
 
@@ -60,11 +53,9 @@ class UserModel extends Equatable {
       'id': id,
       'email': email,
       'name': name,
-      'phone': phone,
-      'is_terms_accepted': isTermsAccepted,
     };
   }
 
   @override
-  List<Object?> get props => [id, email, name, isTermsAccepted, phone];
+  List<Object?> get props => [id, email, name];
 }

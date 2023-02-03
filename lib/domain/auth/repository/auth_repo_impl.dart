@@ -26,9 +26,9 @@ class AuthRepositoryImplementation implements AuthRepositoryI {
   }
 
   @override
-  Future<Either<Failure, UserModel>> isUserSignedIn(String phoneNumber) async {
+  Future<Either<Failure, UserModel>> isUserSignedIn(String email) async {
     try {
-      final result = await remoteDataSource.getUserByPhoneNumber(phoneNumber);
+      final result = await remoteDataSource.getUserByEmail(email);
       return Right(result);
     } on ServerFailure catch (exception) {
       return Left(ServerFailure(message: 'Something went wrong: $exception'));

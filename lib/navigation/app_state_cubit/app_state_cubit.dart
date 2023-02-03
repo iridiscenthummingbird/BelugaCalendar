@@ -7,8 +7,6 @@ import 'package:injectable/injectable.dart';
 import 'package:routemaster/routemaster.dart';
 
 import '../../domain/auth/repository/auth_repo.dart';
-import '../../domain/core/entities/token.dart';
-import '../../services/token_service/token_service.dart';
 import '../app_map.dart';
 import '../auth_map.dart';
 import '../splash_map.dart';
@@ -17,54 +15,34 @@ part '../app_state_cubit/app_state.dart';
 
 @injectable
 class AppStateCubit extends Cubit<AppState> {
-  final TokenManager tokenManager;
   final AuthRepositoryI authRepository;
-  //final FirebaseAuth firebaseAuth;
+  final FirebaseAuth firebaseAuth;
 
   AppStateCubit({
     required this.authRepository,
-    required this.tokenManager,
-    //required this.firebaseAuth,
+    required this.firebaseAuth,
   }) : super(SplashState());
 
-  Future<void> signOut() async {
-    await tokenManager.removeTokenData();
-  }
-
-  void startCheck() async {
-    tokenManager.tokenStream.listen(
-      (token) => _checkAuthStatus(token.tokenType),
-    );
-  }
-
   void checkAuthStatus() async {
-    final token = await tokenManager.getToken();
-    await _checkAuthStatus(token.tokenType);
+    final currentUser = firebaseAuth.currentUser;
+    if (currentUser != null) {
+      final result =
+          await authRepository.isUserSignedIn(currentUser.email ?? '');
+      result.fold(
+        (failure) {
+          emit(UnauthorizedState());
+        },
+        (user) {
+          emit(AuthorizedState(user: user));
+        },
+      );
+    } else {
+      emit(UnauthorizedState());
+    }
   }
 
-  _checkAuthStatus(TokenType tokenType) async {
-    emit(UnauthorizedState());
-
-    // switch (tokenType) {
-    //   case TokenType.user:
-    //     final currentUser = firebaseAuth.currentUser;
-    //     if (currentUser != null) {
-    //       final result = await authRepository
-    //           .isUserSignedIn(currentUser.phoneNumber as String);
-    //       result.fold(
-    //         (failure) {
-    //           emit(UnauthorizedState());
-    //         },
-    //         (user) {
-    //           emit(AuthorizedState(user: user));
-    //         },
-    //       );
-    //     } else {
-    //       emit(UnauthorizedState());
-    //     }
-    //     break;
-    //   case TokenType.none:
-    //     emit(UnauthorizedState());
-    // }
+  void logOut() async {
+    await firebaseAuth.signOut();
+    checkAuthStatus();
   }
 }

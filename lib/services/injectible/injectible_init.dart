@@ -26,11 +26,11 @@ abstract class RegisterModule {
   @lazySingleton
   Connectivity get connectivity => Connectivity();
 
-  // @lazySingleton
-  // FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
+  @lazySingleton
+  FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
 
-  // @lazySingleton
-  // FirebaseFirestore get firestore => FirebaseFirestore.instance;
+  @lazySingleton
+  FirebaseFirestore get firestore => FirebaseFirestore.instance;
 
   @preResolve
   Future<SharedPreferences> get prefs => SharedPreferences.getInstance();

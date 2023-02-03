@@ -1,123 +1,79 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:beluga_calendar/domain/core/errors/failures.dart';
-import 'package:beluga_calendar/domain/shared_models/api/update_user_profile_data.dart';
 import 'package:beluga_calendar/domain/shared_models/api/user_model.dart';
 import 'package:beluga_calendar/services/firestore/firestore_users.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class AuthDataSourceI {
-  Future<void> verifyPhoneNumber({
-    required String phoneNumber,
-    required PhoneVerificationCompleted verificationCompleted,
-    required PhoneVerificationFailed verificationFailed,
-    required PhoneCodeSent codeSent,
-    required PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout,
-    required Duration timeout,
-  });
-  Future<UserCredential> signIn(PhoneAuthCredential credential);
+  Future<UserCredential> signIn(String email, String password);
+  Future<UserCredential> signUp(String email, String password);
   Future<void> signOut();
-  Future<UserModel> getUserByPhoneNumber(String phoneNumber);
-  Future<void> updateUserProfile({
-    required String userId,
-    required UpdateUserProfileData data,
-  });
+  Future<UserModel> getUserByEmail(String email);
 }
 
 @Injectable(as: AuthDataSourceI)
 class AuthDataSourceImpl implements AuthDataSourceI {
-  //AuthDataSourceImpl({
-  //required this.firebaseAuth,
-  //required this.firestoreUsers,
-  //});
+  AuthDataSourceImpl({
+    required this.firebaseAuth,
+    required this.firestoreUsers,
+  });
 
-  //final FirebaseAuth firebaseAuth;
-  //final FirestoreUsers firestoreUsers;
-
-  @override
-  Future<void> verifyPhoneNumber({
-    required String phoneNumber,
-    required PhoneVerificationCompleted verificationCompleted,
-    required PhoneVerificationFailed verificationFailed,
-    required PhoneCodeSent codeSent,
-    required PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout,
-    required Duration timeout,
-  }) async {
-    throw UnimplementedError();
-
-    // try {
-    //   await firebaseAuth.verifyPhoneNumber(
-    //     phoneNumber: phoneNumber,
-    //     verificationCompleted: verificationCompleted,
-    //     verificationFailed: verificationFailed,
-    //     codeSent: codeSent,
-    //     codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
-    //     timeout: timeout,
-    //   );
-    // } on FirebaseAuthException catch (exception) {
-    //   throw (ServerFailure(message: exception.code));
-    // } catch (exception) {
-    //   throw (OtherFailure(message: 'Failed to verify phone number $exception'));
-    // }
-  }
+  final FirebaseAuth firebaseAuth;
+  final FirestoreUsers firestoreUsers;
 
   @override
-  Future<UserCredential> signIn(PhoneAuthCredential credential) async {
-    throw UnimplementedError();
-
-    // try {
-    //   final userCredential =
-    //       await firebaseAuth.signInWithCredential(credential);
-    //   final phoneNumber = userCredential.user!.phoneNumber as String;
-    //   final userExists = await firestoreUsers.checkUserExists(phoneNumber);
-    //   if (!userExists) {
-    //     await firestoreUsers.addUser(
-    //       UpdateUserProfileData(
-    //         phoneNumber: phoneNumber,
-    //         email: '',
-    //         isTermsAccepted: false,
-    //       ),
-    //     );
-    //   }
-    //   return userCredential;
-    // } on FirebaseAuthException catch (exception) {
-    //   throw (ServerFailure(message: exception.code));
-    // } catch (exception) {
-    //   throw (OtherFailure(message: 'Failed to verify phone number $exception'));
-    // }
-  }
-
-  @override
-  Future<UserModel> getUserByPhoneNumber(String phoneNumber) async {
-    throw UnimplementedError();
-
-    // try {
-    //   final result = await firestoreUsers.getUserByPhoneNumber(phoneNumber);
-    //   return result;
-    // } catch (exception) {
-    //   throw ServerFailure(message: 'Something went wrong: $exception');
-    // }
-  }
-
-  @override
-  Future<void> updateUserProfile(
-      {required String userId, required UpdateUserProfileData data}) async {
-    throw UnimplementedError();
-
-    // try {
-    //   await firestoreUsers.updateUser(userId, data);
-    // } catch (exception) {
-    //   throw ServerFailure(message: 'Could not update profile: $exception');
-    // }
+  Future<UserCredential> signIn(String email, String password) async {
+    try {
+      final userCredential = await firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final userEmail = userCredential.user!.email!;
+      final userExists = await firestoreUsers.checkUserExists(email);
+      if (!userExists) {
+        await firestoreUsers.addUser(userEmail);
+      }
+      return userCredential;
+    } on FirebaseAuthException catch (exception) {
+      throw (ServerFailure(message: exception.message ?? exception.code));
+    } catch (exception) {
+      throw (OtherFailure(message: 'Failed to sign in $exception'));
+    }
   }
 
   @override
   Future<void> signOut() async {
-    throw UnimplementedError();
+    try {
+      firebaseAuth.signOut();
+    } catch (exception) {
+      throw (ServerFailure(message: exception.toString()));
+    }
+  }
 
-    // try {
-    //   firebaseAuth.signOut();
-    // } catch (exception) {
-    //   throw (ServerFailure(message: exception.toString()));
-    // }
+  @override
+  Future<UserModel> getUserByEmail(String email) async {
+    try {
+      final result = await firestoreUsers.getUserByEmail(email);
+      return result;
+    } catch (exception) {
+      throw ServerFailure(message: 'Something went wrong: $exception');
+    }
+  }
+
+  @override
+  Future<UserCredential> signUp(String email, String password) async {
+    try {
+      final userCredential = await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await firestoreUsers.addUser(email);
+
+      return userCredential;
+    } on FirebaseAuthException catch (exception) {
+      throw (ServerFailure(message: exception.message ?? exception.code));
+    } catch (exception) {
+      throw (OtherFailure(message: 'Failed to sign up $exception'));
+    }
   }
 }

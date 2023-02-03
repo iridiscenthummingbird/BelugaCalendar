@@ -1,3 +1,4 @@
+import 'package:beluga_calendar/flows/auth/domain/usecases/sign_in.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:beluga_calendar/domain/core/errors/failures.dart';
@@ -6,23 +7,13 @@ import 'package:beluga_calendar/flows/auth/domain/repositories/auth_repository.d
 import 'package:injectable/injectable.dart';
 
 @injectable
-class SignInUseCase implements UseCase<UserCredential, SignInParams> {
+class SignUpUseCase implements UseCase<UserCredential, SignInParams> {
   final AuthRepositoryI repository;
 
-  SignInUseCase(this.repository);
+  SignUpUseCase(this.repository);
 
   @override
   Future<Either<Failure, UserCredential>> call(SignInParams parameters) async {
-    return await repository.signIn(parameters);
+    return await repository.signUp(parameters);
   }
-}
-
-class SignInParams {
-  final String email;
-  final String password;
-
-  SignInParams({
-    required this.email,
-    required this.password,
-  });
 }

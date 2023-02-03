@@ -14,9 +14,8 @@ import 'services/navigation_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
+  await Firebase.initializeApp();
   Routemaster.setPathUrlStrategy();
-  //await AppConfig().load();
   await configureDependencies();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -44,6 +43,9 @@ class App extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primaryColor: const Color(0xFF643FDB),
+            ),
             themeMode: ThemeMode.system,
             routeInformationParser: const RoutemasterParser(),
             routerDelegate: RoutemasterDelegate(
