@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class ThemeDataValues {
   ThemeData get defaultThemeData => ThemeData(
-        fontFamily: 'NotoSans',
-        appBarTheme: const AppBarTheme(
+        // fontFamily: GoogleFonts.rubik().fontFamily,
+        appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
           centerTitle: false,
-          elevation: 1,
-          foregroundColor: Color(0xFFFF9D43),
+          elevation: 0,
+          foregroundColor: const Color(0xFF1C1243),
           titleTextStyle: TextStyle(
-            fontSize: 24,
-            fontFamily: 'NotoSans',
+            fontSize: 18,
+            fontFamily: GoogleFonts.rubik().fontFamily,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF494949),
+            color: const Color(0xFF1C1243),
           ),
         ),
         scaffoldBackgroundColor: Colors.white,
-        disabledColor: const Color(0xffdbdbdb),
-        secondaryHeaderColor: const Color.fromRGBO(73, 73, 73, 0.54),
-        unselectedWidgetColor: const Color.fromRGBO(0, 0, 0, 0.54),
-        toggleableActiveColor: const Color.fromARGB(255, 204, 223, 225),
-        primaryColor: const Color(0xFFFF9D43),
+        primaryColor: const Color(0xFF643FDB),
+        primaryColorDark: const Color(0xFF1C1243),
         primaryTextTheme: const TextTheme(
           titleLarge: TextStyle(
             fontSize: 32,
@@ -73,8 +71,8 @@ class ThemeDataValues {
             fontWeight: FontWeight.w400,
           ),
         ).apply(
-          bodyColor: const Color(0xFF494949),
-          displayColor: const Color(0xFF494949),
+          bodyColor: const Color(0xFF1C1243),
+          displayColor: const Color(0xFF1C1243),
         ),
       );
 }

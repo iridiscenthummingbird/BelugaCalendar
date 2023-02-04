@@ -1,3 +1,4 @@
+import 'package:beluga_calendar/themes/theme_data_values.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,9 +44,7 @@ class App extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primaryColor: const Color(0xFF643FDB),
-            ),
+            theme: getIt<ThemeDataValues>().defaultThemeData,
             themeMode: ThemeMode.system,
             routeInformationParser: const RoutemasterParser(),
             routerDelegate: RoutemasterDelegate(

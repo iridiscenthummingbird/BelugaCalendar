@@ -11,10 +11,30 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsIconsGen {
+  const $AssetsIconsGen();
+
+  /// File path: assets/icons/date.svg
+  SvgGenImage get date => const SvgGenImage('assets/icons/date.svg');
+
+  /// File path: assets/icons/drop_down.svg
+  SvgGenImage get dropDown => const SvgGenImage('assets/icons/drop_down.svg');
+
+  /// File path: assets/icons/menu.svg
+  SvgGenImage get menu => const SvgGenImage('assets/icons/menu.svg');
+
+  /// File path: assets/icons/time.svg
+  SvgGenImage get time => const SvgGenImage('assets/icons/time.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [date, dropDown, menu, time];
+}
+
 class Assets {
   Assets._();
 
   static const SvgGenImage beluga = SvgGenImage('assets/beluga.svg');
+  static const $AssetsIconsGen icons = $AssetsIconsGen();
 
   /// List of all assets
   List<SvgGenImage> get values => [beluga];
