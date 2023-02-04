@@ -11,13 +11,72 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsIconsGen {
+  const $AssetsIconsGen();
+
+  /// File path: assets/icons/arrowLeftIcon.svg
+  SvgGenImage get arrowLeftIcon =>
+      const SvgGenImage('assets/icons/arrowLeftIcon.svg');
+
+  /// File path: assets/icons/calendarIcon.svg
+  SvgGenImage get calendarIcon =>
+      const SvgGenImage('assets/icons/calendarIcon.svg');
+
+  /// File path: assets/icons/clockIcon.svg
+  SvgGenImage get clockIcon => const SvgGenImage('assets/icons/clockIcon.svg');
+
+  /// File path: assets/icons/fileAddingIcon.svg
+  SvgGenImage get fileAddingIcon =>
+      const SvgGenImage('assets/icons/fileAddingIcon.svg');
+
+  /// File path: assets/icons/locationIcon.svg
+  SvgGenImage get locationIcon =>
+      const SvgGenImage('assets/icons/locationIcon.svg');
+
+  /// File path: assets/icons/logOutIcon.svg
+  SvgGenImage get logOutIcon =>
+      const SvgGenImage('assets/icons/logOutIcon.svg');
+
+  /// File path: assets/icons/moreDotsIcon.svg
+  SvgGenImage get moreDotsIcon =>
+      const SvgGenImage('assets/icons/moreDotsIcon.svg');
+
+  /// File path: assets/icons/pencilEditIcon.svg
+  SvgGenImage get pencilEditIcon =>
+      const SvgGenImage('assets/icons/pencilEditIcon.svg');
+
+  /// File path: assets/icons/searchIcon.svg
+  SvgGenImage get searchIcon =>
+      const SvgGenImage('assets/icons/searchIcon.svg');
+
+  /// File path: assets/icons/userProfileIcon.svg
+  SvgGenImage get userProfileIcon =>
+      const SvgGenImage('assets/icons/userProfileIcon.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+        arrowLeftIcon,
+        calendarIcon,
+        clockIcon,
+        fileAddingIcon,
+        locationIcon,
+        logOutIcon,
+        moreDotsIcon,
+        pencilEditIcon,
+        searchIcon,
+        userProfileIcon
+      ];
+}
+
 class Assets {
   Assets._();
 
   static const SvgGenImage beluga = SvgGenImage('assets/beluga.svg');
+  static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const SvgGenImage uploadImage = SvgGenImage('assets/uploadImage.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [beluga];
+  List<SvgGenImage> get values => [beluga, uploadImage];
 }
 
 class AssetGenImage {

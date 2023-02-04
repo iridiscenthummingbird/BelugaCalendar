@@ -32,7 +32,7 @@ class SplashPage extends StatelessWidget {
                 SvgPicture.asset(Assets.beluga.path),
                 const SizedBox(height: 20),
                 const Text(
-                  "Beluga Time",
+                  'Beluga Time',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 40,
