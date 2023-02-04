@@ -18,6 +18,10 @@ class $AssetsIconsGen {
   SvgGenImage get arrowLeftIcon =>
       const SvgGenImage('assets/icons/arrowLeftIcon.svg');
 
+  /// File path: assets/icons/calendarEventIcon.svg
+  SvgGenImage get calendarEventIcon =>
+      const SvgGenImage('assets/icons/calendarEventIcon.svg');
+
   /// File path: assets/icons/calendarIcon.svg
   SvgGenImage get calendarIcon =>
       const SvgGenImage('assets/icons/calendarIcon.svg');
@@ -56,6 +60,7 @@ class $AssetsIconsGen {
   /// List of all assets
   List<SvgGenImage> get values => [
         arrowLeftIcon,
+        calendarEventIcon,
         calendarIcon,
         clockIcon,
         fileAddingIcon,
