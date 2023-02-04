@@ -1,3 +1,5 @@
+import 'package:beluga_calendar/flows/calendar/data/test_data/test_data.dart';
+import 'package:beluga_calendar/flows/calendar/domain/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -15,8 +17,7 @@ class _CalendarPageState extends State<CalendarPage> {
   late DateTime _lastDay;
   late DateTime _selectedDay;
   late CalendarFormat _calendarFormat;
-
-  List<String> value = ['123', 'retru', 'omg', 'did', 'haltura', 'event'];
+  late final ValueNotifier<List<Event>> _selectedEvents;
 
   @override
   void initState() {
@@ -26,6 +27,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _lastDay = DateTime.now().add(const Duration(days: 1000));
     _selectedDay = DateTime.now();
     _calendarFormat = CalendarFormat.month;
+    _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay));
   }
 
   @override
@@ -76,10 +78,14 @@ class _CalendarPageState extends State<CalendarPage> {
                 },
                 selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
                 onDaySelected: (selectedDay, focusedDay) {
-                  setState(() {
-                    _selectedDay = selectedDay;
-                    _focusedDay = focusedDay;
-                  });
+                  if (!isSameDay(_selectedDay, selectedDay)) {
+                    // Call `setState()` when updating the selected day
+                    setState(() {
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                      _selectedEvents.value = _getEventsForDay(_focusedDay);
+                    });
+                  }
                 },
                 headerStyle: HeaderStyle(
                   titleTextFormatter: (date, locale) =>
@@ -87,7 +93,6 @@ class _CalendarPageState extends State<CalendarPage> {
                   titleCentered: true,
                   headerPadding: const EdgeInsets.symmetric(vertical: 10),
                   formatButtonVisible: false,
-                  //headerPadding: const EdgeInsets.symmetric(horizontal: 16),
                   rightChevronPadding: EdgeInsets.zero,
                   leftChevronPadding: EdgeInsets.zero,
                   titleTextStyle: const TextStyle(
@@ -118,22 +123,27 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: value.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 4.0,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: ListTile(
-                    onTap: () => print(value[index]),
-                    title: Text(value[index]),
-                  ),
+            child: ValueListenableBuilder<List<Event>>(
+              valueListenable: _selectedEvents,
+              builder: (context, value, _) {
+                return ListView.builder(
+                  itemCount: value.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 4.0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: ListTile(
+                        onTap: () => print('${value[index]}'),
+                        title: Text('${value[index]}'),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -141,5 +151,9 @@ class _CalendarPageState extends State<CalendarPage> {
         ],
       ),
     );
+  }
+
+  List<Event> _getEventsForDay(DateTime day) {
+    return TestData.kEvents[day] ?? [];
   }
 }
