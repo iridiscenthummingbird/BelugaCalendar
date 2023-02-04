@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart';
 class ThemeDataValues {
   ThemeData get defaultThemeData => ThemeData(
         fontFamily:
-            GoogleFonts.rubik(color: const Color(0xFFFFFFFF)).fontFamily,
+            GoogleFonts.rubik().fontFamily,
         // appBarTheme: AppBarTheme(
         //   backgroundColor: Colors.white,
         //   centerTitle: false,
@@ -19,6 +19,8 @@ class ThemeDataValues {
         //   ),
         // ),
         scaffoldBackgroundColor: Colors.white,
+        primaryColor: const Color(0xFF643FDB),
+        primaryColorDark: const Color(0xFF1C1243),
         primaryTextTheme: TextTheme(
           titleLarge: GoogleFonts.rubik(
             fontSize: 24,
@@ -29,8 +31,8 @@ class ThemeDataValues {
             fontWeight: FontWeight.w400,
           ),
         ).apply(
-          bodyColor: const Color(0xFFFFFFFF),
-          displayColor: const Color(0xFFFFFFFF),
+          bodyColor: const Color(0xFF1C1243),
+          displayColor: const Color(0xFF1C1243),
         ),
       );
 }

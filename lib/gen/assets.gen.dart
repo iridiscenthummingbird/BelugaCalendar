@@ -29,6 +29,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/clockIcon.svg
   SvgGenImage get clockIcon => const SvgGenImage('assets/icons/clockIcon.svg');
 
+  /// File path: assets/icons/date.svg
+  SvgGenImage get date => const SvgGenImage('assets/icons/date.svg');
+
+  /// File path: assets/icons/drop_down.svg
+  SvgGenImage get dropDown => const SvgGenImage('assets/icons/drop_down.svg');
+
   /// File path: assets/icons/fileAddingIcon.svg
   SvgGenImage get fileAddingIcon =>
       const SvgGenImage('assets/icons/fileAddingIcon.svg');
@@ -40,6 +46,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/logOutIcon.svg
   SvgGenImage get logOutIcon =>
       const SvgGenImage('assets/icons/logOutIcon.svg');
+
+  /// File path: assets/icons/menu.svg
+  SvgGenImage get menu => const SvgGenImage('assets/icons/menu.svg');
 
   /// File path: assets/icons/moreDotsIcon.svg
   SvgGenImage get moreDotsIcon =>
@@ -53,6 +62,9 @@ class $AssetsIconsGen {
   SvgGenImage get searchIcon =>
       const SvgGenImage('assets/icons/searchIcon.svg');
 
+  /// File path: assets/icons/time.svg
+  SvgGenImage get time => const SvgGenImage('assets/icons/time.svg');
+
   /// File path: assets/icons/userProfileIcon.svg
   SvgGenImage get userProfileIcon =>
       const SvgGenImage('assets/icons/userProfileIcon.svg');
@@ -63,12 +75,16 @@ class $AssetsIconsGen {
         calendarEventIcon,
         calendarIcon,
         clockIcon,
+        date,
+        dropDown,
         fileAddingIcon,
         locationIcon,
         logOutIcon,
+        menu,
         moreDotsIcon,
         pencilEditIcon,
         searchIcon,
+        time,
         userProfileIcon
       ];
 }
