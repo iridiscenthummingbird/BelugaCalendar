@@ -1,7 +1,7 @@
 import 'dart:collection';
 
-import 'package:beluga_calendar/flows/calendar/domain/models/event.dart';
-import 'package:beluga_calendar/flows/calendar/utils/utils.dart';
+import 'package:beluga_calendar/flows/menu/domain/models/event.dart';
+import 'package:beluga_calendar/flows/menu/utils/utils.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class TestData {

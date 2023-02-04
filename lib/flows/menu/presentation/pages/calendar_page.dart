@@ -1,6 +1,7 @@
-import 'package:beluga_calendar/flows/calendar/data/test_data/test_data.dart';
-import 'package:beluga_calendar/flows/calendar/domain/models/event.dart';
+import 'package:beluga_calendar/flows/menu/data/test_data/test_data.dart';
+import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -17,7 +18,7 @@ class _CalendarPageState extends State<CalendarPage> {
   late DateTime _lastDay;
   late DateTime _selectedDay;
   late CalendarFormat _calendarFormat;
-  late final ValueNotifier<List<Event>> _selectedEvents;
+  late List selectedEvents;
 
   @override
   void initState() {
@@ -27,7 +28,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _lastDay = DateTime.now().add(const Duration(days: 1000));
     _selectedDay = DateTime.now();
     _calendarFormat = CalendarFormat.month;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay));
+    selectedEvents = _getEventsForDay(_focusedDay);
   }
 
   @override
@@ -83,7 +84,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     setState(() {
                       _selectedDay = selectedDay;
                       _focusedDay = focusedDay;
-                      _selectedEvents.value = _getEventsForDay(_focusedDay);
+                      selectedEvents = _getEventsForDay(_focusedDay);
                     });
                   }
                 },
@@ -123,27 +124,24 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ),
           Expanded(
-            child: ValueListenableBuilder<List<Event>>(
-              valueListenable: _selectedEvents,
-              builder: (context, value, _) {
-                return ListView.builder(
-                  itemCount: value.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 4.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: ListTile(
-                        onTap: () => print('${value[index]}'),
-                        title: Text('${value[index]}'),
-                      ),
-                    );
-                  },
+            child: ListView.builder(
+              itemCount: selectedEvents.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 4.0,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  child: ListTile(
+                    leading: SvgPicture.asset(Assets.icons.userProfileIcon.path,
+                        color: Colors.amberAccent),
+                    onTap: () => print('${selectedEvents[index]}'),
+                    title: Text('${selectedEvents[index]}'),
+                  ),
                 );
               },
             ),
@@ -153,7 +151,7 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  List<Event> _getEventsForDay(DateTime day) {
+  List _getEventsForDay(DateTime day) {
     return TestData.kEvents[day] ?? [];
   }
 }
