@@ -49,7 +49,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
             firstDay: firstDay,
             lastDay: lastDay,
             onPageChanged: (currentMonth) =>
-                context.read<CalendarCubit>().loadMonth(currentMonth),
+                context.read<CalendarCubit>().loadMonthEvents(currentMonth),
             selectedDayPredicate: (day) => isSameDay(day, state.selectedDay),
             onDaySelected: (selectedDay, focusedDay) {
               if (!isSameDay(state.selectedDay, selectedDay)) {
@@ -112,19 +112,20 @@ class _CustomCalendarState extends State<CustomCalendar> {
   CalendarBuilders _calendarBuilders(
       LinkedHashMap<DateTime, List<Event>> monthEvents) {
     return CalendarBuilders(
-      markerBuilder: (context, day, events) => _getEventsForDay(day, monthEvents).isNotEmpty
-          ? Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: 7,
-                height: 7,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xFF251460),
-                ),
-              ),
-            )
-          : null,
+      markerBuilder: (context, day, events) =>
+          _getEventsForDay(day, monthEvents).isNotEmpty
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: 7,
+                    height: 7,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFF251460),
+                    ),
+                  ),
+                )
+              : null,
       defaultBuilder: (context, day, focusedDay) => Center(
         child: Text(
           '${day.day}',

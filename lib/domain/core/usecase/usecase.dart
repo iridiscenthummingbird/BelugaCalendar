@@ -1,3 +1,4 @@
+import 'package:beluga_calendar/domain/shared_models/api/user_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
@@ -28,3 +29,12 @@ class AddEventParameters {
   final DateTime dateTime;
 }
 
+class MonthEventsParameters {
+  MonthEventsParameters({
+    required this.user,
+    required this.currentMonth,
+  });
+
+  final UserModel user;
+  final DateTime currentMonth;
+}

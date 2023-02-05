@@ -98,10 +98,10 @@ Future<_i1.GetIt> $initGetIt(
       () => _i21.AuthRepositoryImpl(get<_i17.AuthDataSourceI>()));
   gh.factory<_i22.EventsDataSourceI>(() =>
       _i22.EventsDataSourceImpl(firestoreEvents: get<_i9.FirestoreEvents>()));
-  gh.factory<_i23.EventsRepositoryI>(
+  gh.factory<_i23.CalendarEventsRepositoryI>(
       () => _i24.EventsRepositoryImpl(get<_i22.EventsDataSourceI>()));
   gh.factory<_i25.GetUsersEventsUseCase>(
-      () => _i25.GetUsersEventsUseCase(get<_i23.EventsRepositoryI>()));
+      () => _i25.GetUsersEventsUseCase(get<_i23.CalendarEventsRepositoryI>()));
   gh.factory<_i26.MainPageCubit>(() =>
       _i26.MainPageCubit(getUsersEvents: get<_i25.GetUsersEventsUseCase>()));
   gh.factory<_i27.SignInUseCase>(
@@ -115,7 +115,7 @@ Future<_i1.GetIt> $initGetIt(
     authRepository: get<_i18.AuthRepositoryI>(),
   ));
   gh.factory<_i31.AddEventUseCase>(
-      () => _i31.AddEventUseCase(get<_i23.EventsRepositoryI>()));
+      () => _i31.AddEventUseCase(get<_i23.CalendarEventsRepositoryI>()));
   gh.factory<_i32.AppStateCubit>(() => _i32.AppStateCubit(
         authRepository: get<_i18.AuthRepositoryI>(),
         firebaseAuth: get<_i7.FirebaseAuth>(),

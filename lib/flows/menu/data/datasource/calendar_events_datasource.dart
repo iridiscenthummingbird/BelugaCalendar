@@ -1,11 +1,13 @@
 import 'package:beluga_calendar/domain/core/errors/failures.dart';
+import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/domain/shared_models/api/user_model.dart';
 import 'package:beluga_calendar/flows/menu/data/models/calendar_event_model.dart';
 import 'package:beluga_calendar/services/firestore/firestore_events.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class CalendarEventsDataSourceI {
-  Future<List<CalendarEventModel>> getUsersMonthEvents(UserModel user);
+  Future<List<CalendarEventModel>> getUsersMonthEvents(
+      MonthEventsParameters params);
 }
 
 @Injectable(as: CalendarEventsDataSourceI)
@@ -17,9 +19,10 @@ class EventsDataSourceImpl implements CalendarEventsDataSourceI {
   final FirestoreEvents firestoreEvents;
 
   @override
-  Future<List<CalendarEventModel>> getUsersMonthEvents(UserModel user) async {
+  Future<List<CalendarEventModel>> getUsersMonthEvents(
+      MonthEventsParameters params) async {
     try {
-      final events = await firestoreEvents.getUsersMonthEvents(user.id);
+      final events = await firestoreEvents.getUsersMonthEvents(params);
       return events;
     } catch (exception) {
       throw ServerFailure(message: 'Something went wrong: $exception');

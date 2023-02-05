@@ -1,5 +1,8 @@
 import 'dart:collection';
+import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
+import 'package:beluga_calendar/domain/shared_models/api/user_model.dart';
 import 'package:beluga_calendar/flows/main/domain/entities/event.dart';
+import 'package:beluga_calendar/flows/menu/domain/usecases/get_users_month_events.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
@@ -20,6 +23,8 @@ class CalendarCubit extends Cubit<CalendarState> {
           ),
         );
 
+  final GetUsersMonthEventsUseCase getUsersMonthEvents;
+
   void onDaySelected(
     DateTime selectedDay,
     DateTime focusedDay,
@@ -33,10 +38,13 @@ class CalendarCubit extends Cubit<CalendarState> {
         ),
       );
 
-  void loadMonth(DateTime currentMonth) {
+  Future<void> loadMonthEvents(MonthEventsParameters params) async {
+    final result = await getUsersMonthEvents(
+      params
+    );
     emit(
       state.copyWith(
-        focusedDay: currentMonth,
+        focusedDay: params.currentMonth,
       ),
     );
   }

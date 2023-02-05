@@ -27,7 +27,8 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       body: SafeArea(
         child: BlocProvider(
-          create: (context) => getIt<CalendarCubit>()..loadMonth(DateTime.now()),
+          create: (context) =>
+              getIt<CalendarCubit>()..loadMonthEvents(DateTime.now()),
           child: BlocBuilder<CalendarCubit, CalendarState>(
             builder: (context, state) {
               return Padding(
