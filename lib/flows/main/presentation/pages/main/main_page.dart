@@ -50,7 +50,13 @@ class MainPage extends StatelessWidget {
                               },
                             ),
                             const Spacer(),
-                            EventsFilterButton(onChanged: () {}),
+                            EventsFilterButton(
+                              categories: state.categories,
+                              currentCategoryId: state.selectedCategoryId,
+                              onChanged: (value) => context
+                                  .read<MainPageCubit>()
+                                  .applyFilter(value ?? ''),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 24),
@@ -59,19 +65,37 @@ class MainPage extends StatelessWidget {
                             itemCount: state.events.length,
                             itemBuilder: (context, index) {
                               final event = state.events[index];
-
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
-                                child: EventItem(
-                                  title: event.title,
-                                  description: event.description.isNotEmpty
-                                      ? event.description
-                                      : 'No description.',
-                                  category: event.category,
-                                  date: event.date,
-                                  time: event.time,
-                                ),
-                              );
+                              if (state.selectedCategoryId.isNotEmpty) {
+                                if (event.category.id ==
+                                    state.selectedCategoryId) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 16),
+                                    child: EventItem(
+                                      title: event.title,
+                                      description: event.description.isNotEmpty
+                                          ? event.description
+                                          : 'No description.',
+                                      category: event.category,
+                                      date: event.date,
+                                      time: event.time,
+                                    ),
+                                  );
+                                }
+                              } else {
+                                return Padding(
+                                    padding: const EdgeInsets.only(bottom: 16),
+                                    child: EventItem(
+                                      title: event.title,
+                                      description: event.description.isNotEmpty
+                                          ? event.description
+                                          : 'No description.',
+                                      category: event.category,
+                                      date: event.date,
+                                      time: event.time,
+                                    ),
+                                  );
+                              }
+                              return Container();
                             },
                           ),
                         ),
@@ -79,9 +103,13 @@ class MainPage extends StatelessWidget {
                     ),
                   );
                 } else if (state is EventsLoading) {
-                  return const Center(child: Text('Loading...'));
-                } else if (state is EventsError) {
                   return const CircularLoading();
+                } else if (state is EventsError) {
+                  return Center(
+                    child: Text(
+                      'EROOR: ${state.failure.message}',
+                    ),
+                  );
                 }
                 return Container();
               },

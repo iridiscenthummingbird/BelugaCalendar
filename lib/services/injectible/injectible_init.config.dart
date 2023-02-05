@@ -105,8 +105,10 @@ Future<_i1.GetIt> $initGetIt(
       () => _i25.GetCategoriesUseCase(get<_i23.EventsRepositoryI>()));
   gh.factory<_i26.GetUsersEventsUseCase>(
       () => _i26.GetUsersEventsUseCase(get<_i23.EventsRepositoryI>()));
-  gh.factory<_i27.MainPageCubit>(() =>
-      _i27.MainPageCubit(getUsersEvents: get<_i26.GetUsersEventsUseCase>()));
+  gh.factory<_i27.MainPageCubit>(() => _i27.MainPageCubit(
+        getUsersEvents: get<_i26.GetUsersEventsUseCase>(),
+        getCategories: get<_i25.GetCategoriesUseCase>(),
+      ));
   gh.factory<_i28.SignInUseCase>(
       () => _i28.SignInUseCase(get<_i20.AuthRepositoryI>()));
   gh.factory<_i29.SignOutUseCase>(
