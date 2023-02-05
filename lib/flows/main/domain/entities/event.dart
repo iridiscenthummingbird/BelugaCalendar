@@ -1,3 +1,5 @@
+import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
+
 class Event {
   const Event({
     required this.title,
@@ -13,7 +15,7 @@ class Event {
   final String description;
   final String date;
   final String time;
-  final String category;
+  final Category category;
   final List<String> participantsIds;
   // final List<String> filePathes;
 }
