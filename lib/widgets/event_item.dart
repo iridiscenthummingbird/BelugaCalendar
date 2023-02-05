@@ -1,3 +1,4 @@
+import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,7 +15,7 @@ class EventItem extends StatelessWidget {
 
   final String title;
   final String description;
-  final String category;
+  final Category category;
   final String date;
   final String time;
 
@@ -37,7 +38,7 @@ class EventItem extends StatelessWidget {
               Container(
                 height: 140,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
+                  color: category.color,
                   borderRadius:
                       const BorderRadius.horizontal(left: Radius.circular(16)),
                 ),
@@ -46,7 +47,7 @@ class EventItem extends StatelessWidget {
                   quarterTurns: 3,
                   child: Center(
                     child: Text(
-                      category,
+                      category.name,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
