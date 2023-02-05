@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:beluga_calendar/flows/menu/domain/models/event.dart';
+import 'package:beluga_calendar/flows/main/domain/entities/event.dart';
 import 'package:beluga_calendar/flows/menu/utils/utils.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -11,24 +11,34 @@ class TestData {
     hashCode: Utils.getHashCode,
   )..addAll({
       DateTime(2023, 2, 9): [
-        const Event('2'),
-        const Event('22'),
-        const Event('43'),
-      ],
-      DateTime(2023, 2, 5): [
-        const Event('12'),
-        const Event('122'),
-        const Event('143'),
+        const Event(
+          title: 'Study',
+          date: '09.02.2023',
+          description: 'Капець',
+          category: 'Study',
+          time: '22:00',
+          participantsIds: [],
+        ),
       ],
       DateTime(2023, 2, 18): [
-        const Event('211111111'),
-        const Event('2200'),
-        const Event('43yyyyy'),
-        const Event('UUUUUUU'),
-        const Event('UUUUUUU22'),
-        const Event('UUUUUUU21'),
-        const Event('UUUUUUU2189'),
-        const Event('UUUUUUU21121'),
+        const Event(
+          title: 'Study',
+          date: '18.02.2023',
+          description: 'Капець45',
+          category: 'Study',
+          time: '22:00',
+          participantsIds: [],
+        ),
+      ],
+      DateTime(2023, 2, 28): [
+        const Event(
+          title: 'Study',
+          date: '28.02.2023',
+          description: 'Капець2',
+          category: 'Study',
+          time: '22:00',
+          participantsIds: [],
+        ),
       ],
     });
 }
