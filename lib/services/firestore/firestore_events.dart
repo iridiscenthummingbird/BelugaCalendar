@@ -1,4 +1,4 @@
-import 'package:beluga_calendar/flows/main/data/models/add_event_model.dart';
+import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/flows/main/data/models/event_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
@@ -39,7 +39,7 @@ class FirestoreEvents {
     return events;
   }
 
-  Future<void> addEvent(AddEventModel event) async {
+  Future<void> addEvent(AddEventParameters event) async {
     await _eventsCollection.add(
       {
         'ownerId': event.ownerId,
@@ -47,7 +47,7 @@ class FirestoreEvents {
         'description': event.description,
         'dateTime': Timestamp.fromDate(event.dateTime),
         // TODO: add categories
-        'category': event.categoryId,
+        'categoryId': event.categoryId,
       },
     );
   }

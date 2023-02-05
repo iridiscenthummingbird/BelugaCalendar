@@ -1,13 +1,13 @@
 import 'package:beluga_calendar/domain/core/errors/failures.dart';
+import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/domain/shared_models/api/user_model.dart';
-import 'package:beluga_calendar/flows/main/data/models/add_event_model.dart';
 import 'package:beluga_calendar/flows/main/data/models/event_model.dart';
 import 'package:beluga_calendar/services/firestore/firestore_events.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class EventsDataSourceI {
   Future<List<EventModel>> getUsersEvents(UserModel user);
-  Future<void> addEvent(AddEventModel event);
+  Future<void> addEvent(AddEventParameters event);
 }
 
 @Injectable(as: EventsDataSourceI)
@@ -29,7 +29,7 @@ class EventsDataSourceImpl implements EventsDataSourceI {
   }
 
   @override
-  Future<void> addEvent(AddEventModel event) async {
+  Future<void> addEvent(AddEventParameters event) async {
     try {
       await firestoreEvents.addEvent(event);
     } catch (exception) {
