@@ -102,6 +102,18 @@ class AddEventPage extends StatelessWidget {
                                               firstDate: DateTime(2023),
                                               lastDate: DateTime(
                                                   DateTime.now().year + 10),
+                                              builder: (context, child) {
+                                                return Theme(
+                                                  data: ThemeData(
+                                                    colorScheme:
+                                                        ColorScheme.light(
+                                                      primary: Theme.of(context)
+                                                          .primaryColor,
+                                                    ),
+                                                  ),
+                                                  child: child!,
+                                                );
+                                              },
                                             );
                                             addEventCubit.pickDate(date);
                                           },
@@ -126,6 +138,23 @@ class AddEventPage extends StatelessWidget {
                                             final time = await showTimePicker(
                                               context: context,
                                               initialTime: TimeOfDay.now(),
+                                              builder: (context, child) {
+                                                return Theme(
+                                                  data: ThemeData(
+                                                    timePickerTheme:
+                                                        const TimePickerThemeData(
+                                                      dialBackgroundColor:
+                                                          Colors.white,
+                                                    ),
+                                                    colorScheme:
+                                                        ColorScheme.light(
+                                                      primary: Theme.of(context)
+                                                          .primaryColor,
+                                                    ),
+                                                  ),
+                                                  child: child!,
+                                                );
+                                              },
                                             );
                                             addEventCubit.pickTime(
                                               time,

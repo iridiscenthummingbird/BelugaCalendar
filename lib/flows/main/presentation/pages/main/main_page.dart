@@ -49,7 +49,7 @@ class MainPage extends StatelessWidget {
                               },
                             ),
                             const Spacer(),
-                            EventsFilterButton(onChanged: () {  },),
+                            EventsFilterButton(onChanged: () {}),
                           ],
                         ),
                         const SizedBox(height: 24),
