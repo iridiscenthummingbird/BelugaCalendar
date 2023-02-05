@@ -8,5 +8,8 @@ class EventModel extends Event {
     required super.time,
     required super.category,
     required super.participantsIds,
+    required this.dateTime,
   });
+
+  final DateTime dateTime;
 }
