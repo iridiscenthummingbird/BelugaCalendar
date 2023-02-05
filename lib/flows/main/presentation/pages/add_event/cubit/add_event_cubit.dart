@@ -1,5 +1,5 @@
 import 'package:beluga_calendar/domain/core/errors/failures.dart';
-import 'package:beluga_calendar/flows/main/data/models/add_event_model.dart';
+import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/add_event.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class AddEventCubit extends Cubit<AddEventState> {
         time: state.time,
       ),
     );
-    final event = AddEventModel(
+    final event = AddEventParameters(
       ownerId: ownerId,
       title: title,
       description: description,
