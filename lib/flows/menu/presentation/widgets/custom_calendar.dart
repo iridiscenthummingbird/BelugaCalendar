@@ -13,6 +13,9 @@ class CustomCalendar extends StatefulWidget {
 }
 
 class _CustomCalendarState extends State<CustomCalendar> {
+  final DateTime firstDay = DateTime.now().subtract(const Duration(days: 1000));
+  final DateTime lastDay = DateTime.now().add(const Duration(days: 1000));
+
   @override
   Widget build(BuildContext context) {
     var stateProvider = context.read<CalendarCubit>().state;
@@ -39,8 +42,8 @@ class _CustomCalendarState extends State<CustomCalendar> {
         onFormatChanged: (format) =>
             context.read<CalendarCubit>().onFormatChanged(format),
         focusedDay: stateProvider.focusedDay!,
-        firstDay: stateProvider.firstDay!,
-        lastDay: stateProvider.lastDay!,
+        firstDay: firstDay,
+        lastDay: lastDay,
         onPageChanged: (focusedDay) =>
             context.read<CalendarCubit>().onPageChanged(focusedDay),
         selectedDayPredicate: (day) =>

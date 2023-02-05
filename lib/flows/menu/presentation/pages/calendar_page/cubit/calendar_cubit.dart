@@ -11,11 +11,9 @@ class CalendarCubit extends Cubit<CalendarState> {
       : super(
           CalendarState(
             focusedDay: DateTime.now(),
-            firstDay: DateTime.now().subtract(const Duration(days: 1000)),
-            lastDay: DateTime.now().add(const Duration(days: 1000)),
             selectedDay: DateTime.now(),
             calendarFormat: CalendarFormat.month,
-            selectedEvents: null,
+            selectedEvents: const [],
           ),
         );
 
@@ -29,14 +27,25 @@ class CalendarCubit extends Cubit<CalendarState> {
           selectedDay: selectedDay,
           focusedDay: focusedDay,
           selectedEvents: selectedEvents,
+          calendarFormat: super.state.calendarFormat,
         ),
       );
 
   void onPageChanged(DateTime focusedDay) => emit(
-        CalendarState(focusedDay: focusedDay),
+        CalendarState(
+          focusedDay: focusedDay,
+          selectedDay: super.state.selectedDay,
+          selectedEvents: super.state.selectedEvents,
+          calendarFormat: super.state.calendarFormat,
+        ),
       );
 
   void onFormatChanged(CalendarFormat format) => emit(
-        CalendarState(calendarFormat: format),
+        CalendarState(
+          calendarFormat: format,
+          focusedDay: super.state.focusedDay,
+          selectedDay: super.state.selectedDay,
+          selectedEvents: super.state.selectedEvents,
+        ),
       );
 }

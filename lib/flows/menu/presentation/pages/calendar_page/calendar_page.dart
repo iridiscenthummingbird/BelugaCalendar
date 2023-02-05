@@ -27,52 +27,50 @@ class _CalendarPageState extends State<CalendarPage> {
       appBar: AppBar(title: const Text('Calendar App')),
       body: BlocProvider(
         create: (context) => getIt<CalendarCubit>(),
-        child: Builder(
-          builder: (context) {
-            return Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(
-                    right: 20,
-                    left: 20,
-                    top: 16,
-                    bottom: 26,
-                  ),
-                  child: CustomCalendar(),
+        child: Builder(builder: (context) {
+          return Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(
+                  right: 20,
+                  left: 20,
+                  top: 16,
+                  bottom: 26,
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: BlocProvider.of<CalendarCubit>(context)
-                        .state
-                        .selectedEvents!
-                        .length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 12.0,
-                          vertical: 4.0,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: ListTile(
-                          leading: SvgPicture.asset(
-                              Assets.icons.userProfileIcon.path,
-                              color: Colors.amberAccent),
-                          onTap: () => print(
-                              '${context.read<CalendarCubit>().state.selectedEvents![index]}'),
-                          title: Text(
-                              '${context.read<CalendarCubit>().state.selectedEvents![index]}'),
-                        ),
-                      );
-                    },
-                  ),
+                child: CustomCalendar(),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: BlocProvider.of<CalendarCubit>(context)
+                      .state
+                      .selectedEvents!
+                      .length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 4.0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: ListTile(
+                        leading: SvgPicture.asset(
+                            Assets.icons.userProfileIcon.path,
+                            color: Colors.amberAccent),
+                        onTap: () => print(
+                            '${context.read<CalendarCubit>().state.selectedEvents![index]}'),
+                        title: Text(
+                            '${context.read<CalendarCubit>().state.selectedEvents![index]}'),
+                      ),
+                    );
+                  },
                 ),
-              ],
-            );
-          }
-        ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
