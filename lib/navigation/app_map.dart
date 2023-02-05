@@ -1,3 +1,4 @@
+import 'package:beluga_calendar/flows/main/presentation/pages/add_event/add_event.dart';
 import 'package:beluga_calendar/flows/menu/presentation/pages/calendar_page/calendar_page.dart';
 import 'package:beluga_calendar/flows/menu/presentation/pages/find_event/find_event_page.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,9 @@ class AppRouteMap extends RouteMap {
           ),
       FindEventPage.path: (_) => _createMaterialPage(
             const FindEventPage(),
+          ),
+      AddEventPage.path: (_) => _createMaterialPage(
+            const AddEventPage(),
           ),
     };
   }

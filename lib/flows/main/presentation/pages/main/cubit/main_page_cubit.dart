@@ -16,18 +16,21 @@ class MainPageCubit extends Cubit<MainPageState> {
 
   Future<void> loadEvents(UserModel user) async {
     final result = await getUsersEvents(user);
-    result.fold((failure) {
-      emit(
-        EventsError(
-          failure: failure,
-        ),
-      );
-    }, (eventsList) {
-      emit(
-        EventsLoaded(
-          events: eventsList,
-        ),
-      );
-    });
+    result.fold(
+      (failure) {
+        emit(
+          EventsError(
+            failure: failure,
+          ),
+        );
+      },
+      (eventsList) {
+        emit(
+          EventsLoaded(
+            events: eventsList,
+          ),
+        );
+      },
+    );
   }
 }
