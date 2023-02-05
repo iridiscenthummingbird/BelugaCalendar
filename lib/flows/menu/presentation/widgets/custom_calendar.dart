@@ -1,4 +1,6 @@
-import 'package:beluga_calendar/flows/menu/data/test_data/test_data.dart';
+import 'dart:collection';
+
+import 'package:beluga_calendar/flows/main/domain/entities/event.dart';
 import 'package:beluga_calendar/flows/menu/presentation/pages/calendar_page/cubit/calendar_cubit.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
     return BlocBuilder<CalendarCubit, CalendarState>(
       builder: (context, state) {
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
@@ -46,15 +48,15 @@ class _CustomCalendarState extends State<CustomCalendar> {
             focusedDay: state.focusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
-            onPageChanged: (focusedDay) =>
-                context.read<CalendarCubit>().onPageChanged(focusedDay),
+            onPageChanged: (currentMonth) =>
+                context.read<CalendarCubit>().loadMonth(currentMonth),
             selectedDayPredicate: (day) => isSameDay(day, state.selectedDay),
             onDaySelected: (selectedDay, focusedDay) {
               if (!isSameDay(state.selectedDay, selectedDay)) {
                 context.read<CalendarCubit>().onDaySelected(
                       selectedDay,
                       focusedDay,
-                      _getEventsForDay(focusedDay),
+                      _getEventsForDay(focusedDay, state.monthEvents),
                     );
               }
             },
@@ -81,6 +83,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                 shape: BoxShape.circle,
                 color: Color(0xff643FDB),
               ),
+              //selectedTextStyle:
             ),
             daysOfWeekStyle: const DaysOfWeekStyle(
               weekdayStyle: TextStyle(
@@ -94,23 +97,38 @@ class _CustomCalendarState extends State<CustomCalendar> {
                 color: Color(0xff1C1243),
               ),
             ),
-            calendarBuilders: _calendarBuilders(),
+            calendarBuilders: _calendarBuilders(state.monthEvents),
           ),
         );
       },
     );
   }
 
-  List _getEventsForDay(DateTime day) {
-    return TestData.kEvents[day] ?? [];
+  List<Event> _getEventsForDay(
+      DateTime day, LinkedHashMap<DateTime, List<Event>> monthEvents) {
+    return monthEvents[day] ?? [];
   }
 
-  CalendarBuilders _calendarBuilders() {
+  CalendarBuilders _calendarBuilders(
+      LinkedHashMap<DateTime, List<Event>> monthEvents) {
     return CalendarBuilders(
+      markerBuilder: (context, day, events) => _getEventsForDay(day, monthEvents).isNotEmpty
+          ? Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: 7,
+                height: 7,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFF251460),
+                ),
+              ),
+            )
+          : null,
       defaultBuilder: (context, day, focusedDay) => Center(
         child: Text(
           '${day.day}',
-          style: _getEventsForDay(day).isNotEmpty
+          style: _getEventsForDay(day, monthEvents).isNotEmpty
               ? Theme.of(context).primaryTextTheme.displayMedium?.copyWith(
                     fontFamily: Assets.fonts.sourceSansProBlack,
                     fontSize: 14,
