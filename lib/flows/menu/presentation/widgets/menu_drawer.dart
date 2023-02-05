@@ -1,7 +1,12 @@
+import 'package:beluga_calendar/flows/menu/presentation/pages/calendar_page/calendar_page.dart';
+import 'package:beluga_calendar/flows/menu/presentation/pages/find_event/find_event_page.dart';
 import 'package:beluga_calendar/flows/menu/presentation/widgets/custom_menu_item.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
+import 'package:beluga_calendar/navigation/app_state_cubit/app_state_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:routemaster/routemaster.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({
@@ -24,7 +29,9 @@ class MenuDrawer extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 'Beluga Time',
-                style: Theme.of(context).primaryTextTheme.titleLarge,
+                style: Theme.of(context).primaryTextTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).primaryColorLight,
+                    ),
               ),
               const SizedBox(height: 32),
               CustomMenuItem(
@@ -42,20 +49,20 @@ class MenuDrawer extends StatelessWidget {
                 itemText: 'Calendar',
                 iconPath: Assets.icons.calendarIcon.path,
                 // TODO: go to CalendarPage
-                onTap: null,
+                onTap: () => Routemaster.of(context).push(CalendarPage.path),
               ),
               const SizedBox(height: 16),
               CustomMenuItem(
                 itemText: 'Find Event',
                 iconPath: Assets.icons.searchIcon.path,
                 // TODO: go to FindEvent(mainPage?)
-                onTap: null,
+                onTap: () => Routemaster.of(context).push(FindEventPage.path),
               ),
               const Spacer(),
               CustomMenuItem(
                 itemText: 'Log out',
                 iconPath: Assets.icons.logOutIcon.path,
-                //onTap: () => context.read<AppStateCubit>().logOut(),
+                onTap: () => context.read<AppStateCubit>().logOut(),
               ),
               const SizedBox(height: 80),
             ],

@@ -7,20 +7,21 @@ class ThemeDataValues {
   ThemeData get defaultThemeData => ThemeData(
         fontFamily:
             GoogleFonts.rubik().fontFamily,
-        // appBarTheme: AppBarTheme(
-        //   backgroundColor: Colors.white,
-        //   centerTitle: false,
-        //   elevation: 1,
-        //   foregroundColor: const Color(0xFFFF9D43),
-        //   titleTextStyle: GoogleFonts.rubik(
-        //     fontSize: 24,
-        //     fontWeight: FontWeight.w600,
-        //     color: const Color(0xFFFFFFFF),
-        //   ),
-        // ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          centerTitle: false,
+          elevation: 0,
+          foregroundColor: const Color(0xFF1C1243),
+          titleTextStyle: GoogleFonts.rubik(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: const Color(0xFF1C1243),
+          ),
+        ),
         scaffoldBackgroundColor: Colors.white,
         primaryColor: const Color(0xFF643FDB),
         primaryColorDark: const Color(0xFF1C1243),
+        primaryColorLight: const Color(0xffffffff),
         primaryTextTheme: TextTheme(
           titleLarge: GoogleFonts.rubik(
             fontSize: 24,

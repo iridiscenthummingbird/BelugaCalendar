@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:injectable/injectable.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 part 'calendar_state.dart';
 
+@injectable
 class CalendarCubit extends Cubit<CalendarState> {
   CalendarCubit()
       : super(

@@ -11,16 +11,12 @@ class CustomMenuItem extends StatelessWidget {
 
   final String itemText;
   final String iconPath;
-  final Function? onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap != null
-          ? onTap!.call()
-          : () {
-              print(itemText);
-            },
+      onTap: onTap,
       child: Ink(
         child: Row(
           children: [
@@ -31,7 +27,9 @@ class CustomMenuItem extends StatelessWidget {
             const SizedBox(width: 12),
             Text(
               itemText,
-              style: Theme.of(context).primaryTextTheme.titleMedium,
+              style: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).primaryColorLight,
+                  ),
             ),
           ],
         ),
