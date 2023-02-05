@@ -1,8 +1,10 @@
 import 'dart:collection';
 
+import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/flows/main/domain/entities/event.dart';
 import 'package:beluga_calendar/flows/menu/presentation/pages/calendar_page/cubit/calendar_cubit.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
+import 'package:beluga_calendar/navigation/app_state_cubit/app_state_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -49,7 +51,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
             firstDay: firstDay,
             lastDay: lastDay,
             onPageChanged: (currentMonth) =>
-                context.read<CalendarCubit>().loadMonthEvents(currentMonth),
+                context.read<CalendarCubit>().loadMonthEvents(
+                      MonthEventsParameters(
+                        user: ((context.read<AppStateCubit>().state)
+                                as AuthorizedState)
+                            .user,
+                        currentMonth: currentMonth,
+                      ),
+                    ),
             selectedDayPredicate: (day) => isSameDay(day, state.selectedDay),
             onDaySelected: (selectedDay, focusedDay) {
               if (!isSameDay(state.selectedDay, selectedDay)) {

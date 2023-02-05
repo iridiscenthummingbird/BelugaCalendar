@@ -12,7 +12,7 @@ part 'calendar_state.dart';
 
 @injectable
 class CalendarCubit extends Cubit<CalendarState> {
-  CalendarCubit()
+  CalendarCubit({required this.getUsersMonthEvents})
       : super(
           CalendarState(
             focusedDay: DateTime.now(),

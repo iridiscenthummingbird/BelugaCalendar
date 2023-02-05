@@ -1,6 +1,8 @@
+import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/flows/menu/presentation/pages/calendar_page/cubit/calendar_cubit.dart';
 import 'package:beluga_calendar/flows/menu/presentation/widgets/custom_calendar.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
+import 'package:beluga_calendar/navigation/app_state_cubit/app_state_cubit.dart';
 import 'package:beluga_calendar/services/injectible/injectible_init.dart';
 import 'package:beluga_calendar/widgets/event_item.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +29,14 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       body: SafeArea(
         child: BlocProvider(
-          create: (context) =>
-              getIt<CalendarCubit>()..loadMonthEvents(DateTime.now()),
+          create: (context) => getIt<CalendarCubit>()
+            ..loadMonthEvents(
+              MonthEventsParameters(
+                user: ((context.read<AppStateCubit>().state) as AuthorizedState)
+                    .user,
+                currentMonth: DateTime.now(),
+              ),
+            ),
           child: BlocBuilder<CalendarCubit, CalendarState>(
             builder: (context, state) {
               return Padding(
