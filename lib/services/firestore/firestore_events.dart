@@ -1,5 +1,6 @@
 import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/flows/main/data/models/event_model.dart';
+import 'package:beluga_calendar/flows/menu/data/models/calendar_event_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
@@ -37,6 +38,12 @@ class FirestoreEvents {
     );
 
     return events;
+  }
+
+  Future<List<CalendarEventModel>> getUsersMonthEvents(String userId) async {
+    final allEvents = await getUsersEvents(userId);
+    //CalendarEventModel()
+    return [];
   }
 
   Future<void> addEvent(AddEventParameters event) async {

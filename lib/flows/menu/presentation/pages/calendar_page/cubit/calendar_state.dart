@@ -23,7 +23,6 @@ class CalendarState extends Equatable {
         selectedEvents,
       ];
 
-
   CalendarState copyWith({
     DateTime? focusedDay,
     DateTime? selectedDay,
