@@ -1,4 +1,5 @@
 import 'package:beluga_calendar/domain/core/errors/failures.dart';
+import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/domain/shared_models/api/user_model.dart';
 import 'package:beluga_calendar/flows/main/data/datasource/events_datasource.dart';
 import 'package:beluga_calendar/flows/main/domain/entities/event.dart';
@@ -17,6 +18,16 @@ class EventsRepositoryImpl implements EventsRepositoryI {
     try {
       final result = await remoteDataSource.getUsersEvents(user);
       return Right(result);
+    } on ServerFailure catch (exception) {
+      return Left(exception);
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addEvent(AddEventParameters event) async {
+    try {
+      final result = await remoteDataSource.addEvent(event);
+      return(Right(result));
     } on ServerFailure catch (exception) {
       return Left(exception);
     }

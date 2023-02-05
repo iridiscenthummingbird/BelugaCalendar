@@ -23,20 +23,23 @@ import '../../flows/auth/domain/usecases/sign_in.dart' as _i26;
 import '../../flows/auth/domain/usecases/sign_out.dart' as _i27;
 import '../../flows/auth/domain/usecases/sign_up.dart' as _i28;
 import '../../flows/auth/presentation/pages/sign_in/cubit/sign_in_cubit.dart'
-    as _i31;
-import '../../flows/auth/presentation/pages/sign_up/cubit/sign_up_cubit.dart'
     as _i32;
+import '../../flows/auth/presentation/pages/sign_up/cubit/sign_up_cubit.dart'
+    as _i33;
 import '../../flows/main/data/datasource/events_datasource.dart' as _i21;
 import '../../flows/main/data/repositories/events_repository_impl.dart' as _i23;
 import '../../flows/main/domain/repositories/events_repository.dart' as _i22;
+import '../../flows/main/domain/usecases/add_event.dart' as _i30;
 import '../../flows/main/domain/usecases/get_users_events.dart' as _i24;
+import '../../flows/main/presentation/pages/add_event/cubit/add_event_cubit.dart'
+    as _i34;
 import '../../flows/main/presentation/pages/main/cubit/main_page_cubit.dart'
     as _i25;
 import '../../flows/menu/presentation/pages/calendar_page/cubit/calendar_cubit.dart'
     as _i4;
 import '../../flows/splash/presentation/pages/splash/cubit/splash_cubit.dart'
     as _i14;
-import '../../navigation/app_state_cubit/app_state_cubit.dart' as _i30;
+import '../../navigation/app_state_cubit/app_state_cubit.dart' as _i31;
 import '../../themes/theme_data_values.dart' as _i15;
 import '../app_intenal_notification_system/bloc/app_intenal_notifications_bloc.dart'
     as _i3;
@@ -44,7 +47,7 @@ import '../firestore/firestore_events.dart' as _i8;
 import '../firestore/firestore_users.dart' as _i9;
 import '../navigation_service.dart' as _i11;
 import '../token_service/token_service.dart' as _i29;
-import 'injectible_init.dart' as _i33; // ignore_for_file: unnecessary_lambdas
+import 'injectible_init.dart' as _i35; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -108,15 +111,19 @@ Future<_i1.GetIt> $initGetIt(
     secureStorage: get<_i10.FlutterSecureStorage>(),
     authRepository: get<_i17.AuthRepositoryI>(),
   ));
-  gh.factory<_i30.AppStateCubit>(() => _i30.AppStateCubit(
+  gh.factory<_i30.AddEventUseCase>(
+      () => _i30.AddEventUseCase(get<_i22.EventsRepositoryI>()));
+  gh.factory<_i31.AppStateCubit>(() => _i31.AppStateCubit(
         authRepository: get<_i17.AuthRepositoryI>(),
         firebaseAuth: get<_i6.FirebaseAuth>(),
       ));
-  gh.factory<_i31.SignInCubit>(
-      () => _i31.SignInCubit(get<_i26.SignInUseCase>()));
-  gh.factory<_i32.SignUpCubit>(
-      () => _i32.SignUpCubit(get<_i28.SignUpUseCase>()));
+  gh.factory<_i32.SignInCubit>(
+      () => _i32.SignInCubit(get<_i26.SignInUseCase>()));
+  gh.factory<_i33.SignUpCubit>(
+      () => _i33.SignUpCubit(get<_i28.SignUpUseCase>()));
+  gh.factory<_i34.AddEventCubit>(
+      () => _i34.AddEventCubit(addEventUseCase: get<_i30.AddEventUseCase>()));
   return get;
 }
 
-class _$RegisterModule extends _i33.RegisterModule {}
+class _$RegisterModule extends _i35.RegisterModule {}

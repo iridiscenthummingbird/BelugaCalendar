@@ -3,6 +3,7 @@ import 'package:beluga_calendar/flows/menu/presentation/pages/find_event/find_ev
 import 'package:beluga_calendar/flows/menu/presentation/widgets/custom_menu_item.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:beluga_calendar/navigation/app_state_cubit/app_state_cubit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +16,11 @@ class MenuDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final email = FirebaseAuth.instance.currentUser?.email;
+    String userName = '';
+    if (email != null) {
+      userName = email.split('@')[0];
+    }
     return Drawer(
       width: (MediaQuery.of(context).size.width + 100) / 2,
       backgroundColor: const Color(0xff643FDB),
@@ -35,7 +41,7 @@ class MenuDrawer extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               CustomMenuItem(
-                itemText: 'gmail',
+                itemText: userName,
                 iconPath: Assets.icons.userProfileIcon.path,
               ),
               const SizedBox(height: 12),

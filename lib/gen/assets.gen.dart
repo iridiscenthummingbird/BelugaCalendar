@@ -27,9 +27,15 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/add_event.svg
+  SvgGenImage get addEvent => const SvgGenImage('assets/icons/add_event.svg');
+
   /// File path: assets/icons/arrowLeftIcon.svg
   SvgGenImage get arrowLeftIcon =>
       const SvgGenImage('assets/icons/arrowLeftIcon.svg');
+
+  /// File path: assets/icons/back.svg
+  SvgGenImage get back => const SvgGenImage('assets/icons/back.svg');
 
   /// File path: assets/icons/calendarEventIcon.svg
   SvgGenImage get calendarEventIcon =>
@@ -88,7 +94,9 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        addEvent,
         arrowLeftIcon,
+        back,
         calendarEventIcon,
         calendarIcon,
         clockIcon,
