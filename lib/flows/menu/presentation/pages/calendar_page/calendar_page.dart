@@ -2,6 +2,7 @@ import 'package:beluga_calendar/flows/menu/presentation/pages/calendar_page/cubi
 import 'package:beluga_calendar/flows/menu/presentation/widgets/custom_calendar.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:beluga_calendar/services/injectible/injectible_init.dart';
+import 'package:beluga_calendar/widgets/event_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -94,19 +95,17 @@ class _CalendarPageState extends State<CalendarPage> {
                             child: ListView.builder(
                               itemCount: state.selectedEvents.length,
                               itemBuilder: (context, index) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(),
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child: ListTile(
-                                    leading: SvgPicture.asset(
-                                        Assets.icons.userProfileIcon.path,
-                                        color: Colors.amberAccent),
-                                    onTap: () =>
-                                        print('${state.selectedEvents[index]}'),
-                                    title:
-                                        Text('${state.selectedEvents[index]}'),
+                                final event = state.selectedEvents[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: EventItem(
+                                    title: event.title,
+                                    description: event.description.isNotEmpty
+                                        ? event.description
+                                        : 'No description.',
+                                    category: event.category,
+                                    date: event.date,
+                                    time: event.time,
                                   ),
                                 );
                               },
