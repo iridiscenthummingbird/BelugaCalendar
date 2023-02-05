@@ -23,29 +23,22 @@ class CalendarCubit extends Cubit<CalendarState> {
     List<dynamic> selectedEvents,
   ) =>
       emit(
-        CalendarState(
+        state.copyWith(
           selectedDay: selectedDay,
           focusedDay: focusedDay,
           selectedEvents: selectedEvents,
-          calendarFormat: super.state.calendarFormat,
         ),
       );
 
   void onPageChanged(DateTime focusedDay) => emit(
-        CalendarState(
+        state.copyWith(
           focusedDay: focusedDay,
-          selectedDay: super.state.selectedDay,
-          selectedEvents: super.state.selectedEvents,
-          calendarFormat: super.state.calendarFormat,
         ),
       );
 
   void onFormatChanged(CalendarFormat format) => emit(
-        CalendarState(
+        state.copyWith(
           calendarFormat: format,
-          focusedDay: super.state.focusedDay,
-          selectedDay: super.state.selectedDay,
-          selectedEvents: super.state.selectedEvents,
         ),
       );
 }

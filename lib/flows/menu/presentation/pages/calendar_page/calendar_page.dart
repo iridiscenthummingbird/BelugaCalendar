@@ -27,7 +27,8 @@ class _CalendarPageState extends State<CalendarPage> {
       appBar: AppBar(title: const Text('Calendar App')),
       body: BlocProvider(
         create: (context) => getIt<CalendarCubit>(),
-        child: Builder(builder: (context) {
+        child: BlocBuilder<CalendarCubit, CalendarState>(
+            builder: (context, state) {
           return Column(
             children: [
               const Padding(
@@ -41,10 +42,7 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: BlocProvider.of<CalendarCubit>(context)
-                      .state
-                      .selectedEvents!
-                      .length,
+                  itemCount: state.selectedEvents.length,
                   itemBuilder: (context, index) {
                     return Container(
                       margin: const EdgeInsets.symmetric(
@@ -59,10 +57,8 @@ class _CalendarPageState extends State<CalendarPage> {
                         leading: SvgPicture.asset(
                             Assets.icons.userProfileIcon.path,
                             color: Colors.amberAccent),
-                        onTap: () => print(
-                            '${context.read<CalendarCubit>().state.selectedEvents![index]}'),
-                        title: Text(
-                            '${context.read<CalendarCubit>().state.selectedEvents![index]}'),
+                        onTap: () => print('${state.selectedEvents[index]}'),
+                        title: Text('${state.selectedEvents[index]}'),
                       ),
                     );
                   },

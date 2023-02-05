@@ -18,78 +18,80 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    var stateProvider = context.read<CalendarCubit>().state;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.transparent,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF000000).withOpacity(0.08),
-            spreadRadius: 3,
-            blurRadius: 9,
+    return BlocBuilder<CalendarCubit, CalendarState>(
+      builder: (context, state) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: Colors.transparent,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF000000).withOpacity(0.08),
+                spreadRadius: 3,
+                blurRadius: 9,
+              ),
+            ],
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
           ),
-        ],
-        borderRadius: const BorderRadius.all(Radius.circular(16)),
-      ),
-      child: TableCalendar(
-        rowHeight: 40.0,
-        startingDayOfWeek: StartingDayOfWeek.monday,
-        calendarFormat: stateProvider.calendarFormat!,
-        onFormatChanged: (format) =>
-            context.read<CalendarCubit>().onFormatChanged(format),
-        focusedDay: stateProvider.focusedDay!,
-        firstDay: firstDay,
-        lastDay: lastDay,
-        onPageChanged: (focusedDay) =>
-            context.read<CalendarCubit>().onPageChanged(focusedDay),
-        selectedDayPredicate: (day) =>
-            isSameDay(day, stateProvider.selectedDay),
-        onDaySelected: (selectedDay, focusedDay) {
-          if (!isSameDay(stateProvider.selectedDay, selectedDay)) {
-            context.read<CalendarCubit>().onDaySelected(
-                  selectedDay,
-                  focusedDay,
-                  _getEventsForDay(focusedDay),
-                );
-          }
-        },
-        headerStyle: HeaderStyle(
-          titleTextFormatter: (date, locale) =>
-              DateFormat.yMMMd(locale).format(date),
-          titleCentered: true,
-          headerPadding: const EdgeInsets.symmetric(vertical: 10),
-          formatButtonVisible: false,
-          rightChevronPadding: EdgeInsets.zero,
-          leftChevronPadding: EdgeInsets.zero,
-          titleTextStyle: const TextStyle(
-            color: Color(0xFF1C1243),
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+          child: TableCalendar(
+            rowHeight: 40.0,
+            startingDayOfWeek: StartingDayOfWeek.monday,
+            calendarFormat: state.calendarFormat,
+            onFormatChanged: (format) =>
+                context.read<CalendarCubit>().onFormatChanged(format),
+            focusedDay: state.focusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            onPageChanged: (focusedDay) =>
+                context.read<CalendarCubit>().onPageChanged(focusedDay),
+            selectedDayPredicate: (day) => isSameDay(day, state.selectedDay),
+            onDaySelected: (selectedDay, focusedDay) {
+              if (!isSameDay(state.selectedDay, selectedDay)) {
+                context.read<CalendarCubit>().onDaySelected(
+                      selectedDay,
+                      focusedDay,
+                      _getEventsForDay(focusedDay),
+                    );
+              }
+            },
+            headerStyle: HeaderStyle(
+              titleTextFormatter: (date, locale) =>
+                  DateFormat.yMMMd(locale).format(date),
+              titleCentered: true,
+              headerPadding: const EdgeInsets.symmetric(vertical: 10),
+              formatButtonVisible: false,
+              rightChevronPadding: EdgeInsets.zero,
+              leftChevronPadding: EdgeInsets.zero,
+              titleTextStyle: const TextStyle(
+                color: Color(0xFF1C1243),
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            calendarStyle: const CalendarStyle(
+              selectedDecoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xff643FDB),
+              ),
+            ),
+            daysOfWeekStyle: const DaysOfWeekStyle(
+              weekdayStyle: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff1C1243),
+              ),
+              weekendStyle: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff1C1243),
+              ),
+            ),
           ),
-        ),
-        calendarStyle: const CalendarStyle(
-          selectedDecoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0xff643FDB),
-          ),
-        ),
-        daysOfWeekStyle: const DaysOfWeekStyle(
-          weekdayStyle: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Color(0xff1C1243),
-          ),
-          weekendStyle: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Color(0xff1C1243),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
