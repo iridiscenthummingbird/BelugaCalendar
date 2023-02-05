@@ -11,6 +11,19 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/SourceSansPro-Black.ttf
+  String get sourceSansProBlack => 'assets/fonts/SourceSansPro-Black.ttf';
+
+  /// File path: assets/fonts/SourceSansPro-Regular.ttf
+  String get sourceSansProRegular => 'assets/fonts/SourceSansPro-Regular.ttf';
+
+  /// List of all assets
+  List<String> get values => [sourceSansProBlack, sourceSansProRegular];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -28,6 +41,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/clockIcon.svg
   SvgGenImage get clockIcon => const SvgGenImage('assets/icons/clockIcon.svg');
+
+  /// File path: assets/icons/dandruffIcon.svg
+  SvgGenImage get dandruffIcon =>
+      const SvgGenImage('assets/icons/dandruffIcon.svg');
 
   /// File path: assets/icons/date.svg
   SvgGenImage get date => const SvgGenImage('assets/icons/date.svg');
@@ -75,6 +92,7 @@ class $AssetsIconsGen {
         calendarEventIcon,
         calendarIcon,
         clockIcon,
+        dandruffIcon,
         date,
         dropDown,
         fileAddingIcon,
@@ -93,6 +111,7 @@ class Assets {
   Assets._();
 
   static const SvgGenImage beluga = SvgGenImage('assets/beluga.svg');
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const SvgGenImage uploadImage = SvgGenImage('assets/uploadImage.svg');
 

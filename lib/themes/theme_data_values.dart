@@ -1,3 +1,4 @@
+import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:injectable/injectable.dart';
@@ -5,8 +6,7 @@ import 'package:injectable/injectable.dart';
 @lazySingleton
 class ThemeDataValues {
   ThemeData get defaultThemeData => ThemeData(
-        fontFamily:
-            GoogleFonts.rubik().fontFamily,
+        fontFamily: GoogleFonts.rubik().fontFamily,
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
           centerTitle: false,
@@ -29,6 +29,15 @@ class ThemeDataValues {
           ),
           titleMedium: GoogleFonts.rubik(
             fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+          displayLarge: GoogleFonts.rubik(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+          displayMedium: TextStyle(
+            fontFamily: Assets.fonts.sourceSansProRegular,
+            fontSize: 14,
             fontWeight: FontWeight.w400,
           ),
         ).apply(

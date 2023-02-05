@@ -1,5 +1,6 @@
 import 'package:beluga_calendar/flows/menu/data/test_data/test_data.dart';
 import 'package:beluga_calendar/flows/menu/presentation/pages/calendar_page/cubit/calendar_cubit.dart';
+import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -72,6 +73,10 @@ class _CustomCalendarState extends State<CustomCalendar> {
               ),
             ),
             calendarStyle: const CalendarStyle(
+              todayTextStyle: TextStyle(
+                color: Color(0xFF1C1243),
+                fontWeight: FontWeight.w500,
+              ),
               selectedDecoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Color(0xff643FDB),
@@ -89,6 +94,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                 color: Color(0xff1C1243),
               ),
             ),
+            calendarBuilders: _calendarBuilders(),
           ),
         );
       },
@@ -97,5 +103,27 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
   List _getEventsForDay(DateTime day) {
     return TestData.kEvents[day] ?? [];
+  }
+
+  CalendarBuilders _calendarBuilders() {
+    return CalendarBuilders(
+      defaultBuilder: (context, day, focusedDay) => Center(
+        child: Text(
+          '${day.day}',
+          style: _getEventsForDay(day).isNotEmpty
+              ? Theme.of(context).primaryTextTheme.displayMedium?.copyWith(
+                    fontFamily: Assets.fonts.sourceSansProBlack,
+                    fontSize: 14,
+                    color: const Color(0xFF643FDB),
+                    fontWeight: FontWeight.bold,
+                  )
+              : Theme.of(context).primaryTextTheme.displayMedium?.copyWith(
+                    fontSize: 14,
+                    color: const Color(0xFF1C1243),
+                    fontWeight: FontWeight.w500,
+                  ),
+        ),
+      ),
+    );
   }
 }
