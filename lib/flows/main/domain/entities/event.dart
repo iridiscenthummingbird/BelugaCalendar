@@ -6,6 +6,7 @@ class Event {
     required this.time,
     required this.category,
     required this.participantsIds,
+    required this.dateTime,
     // required this.filePathes,
   });
 
@@ -15,5 +16,6 @@ class Event {
   final String time;
   final String category;
   final List<String> participantsIds;
+  final DateTime dateTime;
   // final List<String> filePathes;
 }
