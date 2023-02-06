@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
@@ -20,6 +22,7 @@ class AddEventParameters {
     required this.description,
     required this.categoryId,
     required this.dateTime,
+    required this.file,
   });
 
   final String ownerId;
@@ -28,4 +31,5 @@ class AddEventParameters {
   final String description;
   final String categoryId;
   final DateTime dateTime;
+  final File? file;
 }

@@ -176,6 +176,35 @@ class EventPage extends StatelessWidget {
                                 color: Theme.of(context).primaryColor,
                               ),
                             ),
+                            if (event.fileName != null) ...{
+                              Align(
+                                child: TextButton(
+                                  onPressed: () {
+                                    Share.shareXFiles(
+                                      [event.file!],
+                                      subject: event.fileName,
+                                    );
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.download,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        event.fileName!,
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                            },
                             Text(
                               'Participants (${event.participantsEmails.length}): ',
                               style: const TextStyle(

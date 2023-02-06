@@ -1,7 +1,9 @@
 import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/flows/main/data/models/category_model.dart';
 import 'package:beluga_calendar/flows/main/data/models/event_model.dart';
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
@@ -43,6 +45,8 @@ class FirestoreEvents {
               List<String>.empty(),
       id: eventId,
       shareLink: eventData['shareCode'],
+      file: await getFile(eventData['filePath']),
+      fileName: eventData['filePath'],
     );
 
     return eventModel;
@@ -53,7 +57,7 @@ class FirestoreEvents {
     final result =
         await _eventsCollection.where('ownerId', isEqualTo: userId).get();
     final resultDocs = result.docs;
-    final events = resultDocs.map((item) {
+    final eventsFuture = resultDocs.map((item) async {
       final eventData = item.data();
       final category =
           categories.firstWhereOrNull((c) => c.id == eventData['categoryId']) ??
@@ -80,8 +84,14 @@ class FirestoreEvents {
                 List<String>.empty(),
         id: item.id,
         shareLink: eventData['shareCode'],
+        file: await getFile(eventData['filePath']),
+        fileName: eventData['filePath'],
       );
     }).toList();
+    final List<EventModel> events = [];
+    for (final future in eventsFuture) {
+      events.add(await future);
+    }
     events.sort(
       (a, b) => a.dateTime.compareTo(b.dateTime),
     );
@@ -103,7 +113,7 @@ class FirestoreEvents {
         .get();
 
     final resultDocs = result.docs;
-    final events = resultDocs.map((item) {
+    final eventsFuture = resultDocs.map((item) async {
       final eventData = item.data();
       final category =
           categories.firstWhereOrNull((c) => c.id == eventData['categoryId']) ??
@@ -130,8 +140,14 @@ class FirestoreEvents {
                 List<String>.empty(),
         id: item.id,
         shareLink: eventData['shareCode'],
+        file: await getFile(eventData['filePath']),
+        fileName: eventData['filePath'],
       );
     }).toList();
+    final List<EventModel> events = [];
+    for (final future in eventsFuture) {
+      events.add(await future);
+    }
     events.sort(
       (a, b) => a.dateTime.compareTo(b.dateTime),
     );
@@ -141,6 +157,15 @@ class FirestoreEvents {
 
   Future<void> addEvent(AddEventParameters event) async {
     final shareCode = DateTime.now().millisecondsSinceEpoch - 1675690000000;
+    String filePath = '';
+    if (event.file != null) {
+      final storageRef = FirebaseStorage.instance.ref();
+      final cuted = event.file!.path.split('/');
+      final pathForSave =
+          '${DateTime.now().millisecondsSinceEpoch}${cuted[cuted.length - 1]}';
+      final res = await storageRef.child(pathForSave).putFile(event.file!);
+      filePath = res.ref.fullPath;
+    }
     await _eventsCollection.add(
       {
         'ownerId': event.ownerId,
@@ -151,6 +176,9 @@ class FirestoreEvents {
         'participantsIds': [event.ownerId],
         'participantsEmails': [event.ownerEmail],
         'shareCode': '$shareCode',
+        if (event.file != null) ...{
+          'filePath': filePath,
+        },
       },
     );
   }
@@ -186,5 +214,21 @@ class FirestoreEvents {
         'description': description,
       },
     );
+  }
+
+  Future<XFile?> getFile(String? path) async {
+    try {
+      if (path != null) {
+        final storageRef = FirebaseStorage.instance.ref();
+        final data = await storageRef.child(path).getData();
+        if (data != null) {
+          final file = XFile.fromData(data);
+          return file;
+        } else {
+          return null;
+        }
+      }
+    } catch (_) {}
+    return null;
   }
 }

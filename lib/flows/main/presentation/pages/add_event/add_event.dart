@@ -223,6 +223,37 @@ class AddEventPage extends StatelessWidget {
                                           )
                                           .toList(),
                                     ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        if (state.file == null) {
+                                          addEventCubit.addFile(context);
+                                        } else {
+                                          addEventCubit.deleteFile();
+                                        }
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            state.file == null
+                                                ? Icons.file_upload
+                                                : Icons.delete,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            state.file == null
+                                                ? 'Pick file'
+                                                : 'Delete file',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                     const Spacer(),
                                     Padding(
                                       padding: const EdgeInsets.only(
