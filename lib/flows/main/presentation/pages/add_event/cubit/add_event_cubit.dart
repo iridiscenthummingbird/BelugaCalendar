@@ -1,7 +1,9 @@
 import 'package:beluga_calendar/domain/core/errors/failures.dart';
 import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
+import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/add_event.dart';
 import 'package:beluga_calendar/services/add_to_calendar_service.dart';
+import 'package:beluga_calendar/flows/main/domain/usecases/get_categories.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,21 +14,59 @@ part 'add_event_state.dart';
 
 @injectable
 class AddEventCubit extends Cubit<AddEventState> {
-  AddEventCubit({required this.addEventUseCase})
-      : formKey = GlobalKey<FormState>(),
+  AddEventCubit({
+    required this.addEventUseCase,
+    required this.getCategoriesUseCase,
+  })  : formKey = GlobalKey<FormState>(),
         titleController = TextEditingController(),
         dateController = TextEditingController(text: 'Date'),
         timeController = TextEditingController(text: 'Time'),
         descriptionController = TextEditingController(),
-        super(const AddEventInitial());
+        super(const CategoriesLoading());
 
   final AddEventUseCase addEventUseCase;
+  final GetCategoriesUseCase getCategoriesUseCase;
 
   final GlobalKey<FormState> formKey;
   final TextEditingController titleController;
   final TextEditingController dateController;
   final TextEditingController timeController;
   final TextEditingController descriptionController;
+
+  Future<void> loadCategories() async {
+    final result = await getCategoriesUseCase(NoParams());
+    result.fold(
+      (failure) {
+        emit(
+          AddEventError(
+            date: state.date,
+            time: state.time,
+            selectedCategoryId: state.selectedCategoryId,
+            categories: state.categories,
+            failure: failure,
+          ),
+        );
+      },
+      (categories) {
+        emit(
+          AddEventInitial(
+            date: state.date,
+            time: state.time,
+            selectedCategoryId: state.selectedCategoryId,
+            categories: categories,
+          ),
+        );
+      },
+    );
+  }
+
+  void selectCategory(Category category) {
+    emit(
+      state.copyWith(
+        selectedCategoryId: category.id,
+      ),
+    );
+  }
 
   void addEvent({
     required String ownerId,
@@ -39,6 +79,8 @@ class AddEventCubit extends Cubit<AddEventState> {
       AddEventLoading(
         date: state.date,
         time: state.time,
+        selectedCategoryId: state.selectedCategoryId,
+        categories: state.categories,
       ),
     );
     final event = AddEventParameters(
@@ -55,6 +97,8 @@ class AddEventCubit extends Cubit<AddEventState> {
           AddEventError(
             date: state.date,
             time: state.time,
+            selectedCategoryId: state.selectedCategoryId,
+            categories: state.categories,
             failure: failure,
           ),
         );
@@ -73,6 +117,8 @@ class AddEventCubit extends Cubit<AddEventState> {
       AddEventInitial(
         date: date,
         time: state.time,
+        selectedCategoryId: state.selectedCategoryId,
+        categories: state.categories,
       ),
     );
   }
@@ -83,6 +129,8 @@ class AddEventCubit extends Cubit<AddEventState> {
       AddEventInitial(
         date: state.date,
         time: time,
+        selectedCategoryId: state.selectedCategoryId,
+        categories: state.categories,
       ),
     );
   }

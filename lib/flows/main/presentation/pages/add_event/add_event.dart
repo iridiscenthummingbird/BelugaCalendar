@@ -1,7 +1,9 @@
 import 'package:beluga_calendar/flows/main/presentation/pages/add_event/cubit/add_event_cubit.dart';
+import 'package:beluga_calendar/flows/main/presentation/pages/add_event/widgets/category_item.dart';
 import 'package:beluga_calendar/flows/main/presentation/pages/add_event/widgets/create_button.dart';
 import 'package:beluga_calendar/flows/main/presentation/pages/add_event/widgets/picker_field.dart';
 import 'package:beluga_calendar/flows/main/presentation/pages/add_event/widgets/event_field.dart';
+import 'package:beluga_calendar/widgets/circular_loading.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:beluga_calendar/navigation/app_state_cubit/app_state_cubit.dart';
 import 'package:beluga_calendar/services/injectible/injectible_init.dart';
@@ -35,7 +37,7 @@ class AddEventPage extends StatelessWidget {
         leadingWidth: 52,
       ),
       body: BlocProvider(
-        create: (context) => getIt<AddEventCubit>(),
+        create: (context) => getIt<AddEventCubit>()..loadCategories(),
         child: BlocListener<AddEventCubit, AddEventState>(
           listener: (context, state) {
             if (state is AddEventError) {
@@ -65,167 +67,220 @@ class AddEventPage extends StatelessWidget {
                     builder: (context, state) {
                       final addEventCubit = context.read<AddEventCubit>();
 
-                      return Stack(children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-                          child: Form(
-                            key: addEventCubit.formKey,
-                            child: Column(
-                              children: [
-                                EventField(
-                                  title: 'Event name',
-                                  controller: addEventCubit.titleController,
-                                  validator: (input) {
-                                    if (input?.isEmpty ?? true) {
-                                      return 'The filed should not be empty';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 24),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                      if (state is! CategoriesLoading) {
+                        return Stack(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 24, 20, 20),
+                              child: Form(
+                                key: addEventCubit.formKey,
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 13),
-                                        child: PickerField(
-                                          controller:
-                                              addEventCubit.dateController,
-                                          onPressed: () async {
-                                            final date = await showDatePicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2023),
-                                              lastDate: DateTime(
-                                                  DateTime.now().year + 10),
-                                              builder: (context, child) {
-                                                return Theme(
-                                                  data: ThemeData(
-                                                    colorScheme:
-                                                        ColorScheme.light(
-                                                      primary: Theme.of(context)
-                                                          .primaryColor,
-                                                    ),
+                                    EventField(
+                                      title: 'Event name',
+                                      controller: addEventCubit.titleController,
+                                      validator: (input) {
+                                        if (input?.isEmpty ?? true) {
+                                          return 'The filed should not be empty';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(height: 24),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 13),
+                                            child: PickerField(
+                                              controller:
+                                                  addEventCubit.dateController,
+                                              onPressed: () async {
+                                                final date =
+                                                    await showDatePicker(
+                                                  context: context,
+                                                  initialDate: DateTime.now(),
+                                                  firstDate: DateTime(2023),
+                                                  lastDate: DateTime(
+                                                    DateTime.now().year + 10,
                                                   ),
-                                                  child: child!,
+                                                  builder: (context, child) {
+                                                    return Theme(
+                                                      data: ThemeData(
+                                                        colorScheme:
+                                                            ColorScheme.light(
+                                                          primary:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                        ),
+                                                      ),
+                                                      child: child!,
+                                                    );
+                                                  },
+                                                );
+                                                addEventCubit.pickDate(date);
+                                              },
+                                              iconPath: Assets.icons.date.path,
+                                              validator: (input) {
+                                                if (state.date == null) {
+                                                  return 'Date should not be empty';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 13),
+                                            child: PickerField(
+                                              controller:
+                                                  addEventCubit.timeController,
+                                              onPressed: () async {
+                                                final time =
+                                                    await showTimePicker(
+                                                  context: context,
+                                                  initialTime: TimeOfDay.now(),
+                                                  builder: (context, child) {
+                                                    return Theme(
+                                                      data: ThemeData(
+                                                        timePickerTheme:
+                                                            const TimePickerThemeData(
+                                                          dialBackgroundColor:
+                                                              Colors.white,
+                                                        ),
+                                                        colorScheme:
+                                                            ColorScheme.light(
+                                                          primary:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                        ),
+                                                      ),
+                                                      child: child!,
+                                                    );
+                                                  },
+                                                );
+                                                addEventCubit.pickTime(
+                                                  time,
+                                                  context,
                                                 );
                                               },
-                                            );
-                                            addEventCubit.pickDate(date);
-                                          },
-                                          iconPath: Assets.icons.date.path,
-                                          validator: (input) {
-                                            if (state.date == null) {
-                                              return 'Date should not be empty';
-                                            }
-                                            return null;
-                                          },
+                                              iconPath: Assets.icons.time.path,
+                                              validator: (input) {
+                                                if (state.time == null) {
+                                                  return 'Time should not be empty';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 24),
+                                    EventField(
+                                      title: 'Description',
+                                      controller:
+                                          addEventCubit.descriptionController,
+                                      focusNode: focusNode,
+                                      maxLength: 200,
+                                      maxLines: 4,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 16, bottom: 12),
+                                      child: Text(
+                                        'Choose category',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                       ),
                                     ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 13),
-                                        child: PickerField(
-                                          controller:
-                                              addEventCubit.timeController,
-                                          onPressed: () async {
-                                            final time = await showTimePicker(
-                                              context: context,
-                                              initialTime: TimeOfDay.now(),
-                                              builder: (context, child) {
-                                                return Theme(
-                                                  data: ThemeData(
-                                                    timePickerTheme:
-                                                        const TimePickerThemeData(
-                                                      dialBackgroundColor:
-                                                          Colors.white,
-                                                    ),
-                                                    colorScheme:
-                                                        ColorScheme.light(
-                                                      primary: Theme.of(context)
-                                                          .primaryColor,
-                                                    ),
-                                                  ),
-                                                  child: child!,
-                                                );
+                                    Wrap(
+                                      spacing: 12,
+                                      runSpacing: 12,
+                                      children: state.categories
+                                          .map(
+                                            (c) => CategoryItem(
+                                              category: c,
+                                              onPressed: () {
+                                                addEventCubit.selectCategory(c);
                                               },
-                                            );
-                                            addEventCubit.pickTime(
-                                              time,
-                                              context,
-                                            );
-                                          },
-                                          iconPath: Assets.icons.time.path,
-                                          validator: (input) {
-                                            if (state.time == null) {
-                                              return 'Time should not be empty';
+                                              isSelected:
+                                                  state.selectedCategoryId ==
+                                                      c.id,
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
+                                    const Spacer(),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 84, top: 10),
+                                      child: CreateButton(
+                                        onPressed: () async {
+                                          final formState = addEventCubit
+                                              .formKey.currentState;
+                                          if (formState?.validate() ?? false) {
+                                            if (state.selectedCategoryId !=
+                                                null) {
+                                              addEventCubit.addEvent(
+                                                ownerId: ((context
+                                                            .read<AppStateCubit>()
+                                                            .state)
+                                                        as AuthorizedState)
+                                                    .user
+                                                    .id,
+                                                title: addEventCubit
+                                                    .titleController.text,
+                                                description: addEventCubit
+                                                    .descriptionController.text,
+                                                dateTime: DateTime(
+                                                  state.date!.year,
+                                                  state.date!.month,
+                                                  state.date!.day,
+                                                  state.time!.hour,
+                                                  state.time!.minute,
+                                                ),
+                                                categoryId:
+                                                    state.selectedCategoryId!,
+                                              );
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    'Please, select a category',
+                                                  ),
+                                                ),
+                                              );
                                             }
-                                            return null;
-                                          },
-                                        ),
+                                          }
+                                        },
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 24),
-                                EventField(
-                                  title: 'Description',
-                                  controller:
-                                      addEventCubit.descriptionController,
-                                  focusNode: focusNode,
-                                  maxLength: 200,
-                                  maxLines: 4,
-                                ),
-                                const Spacer(),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 84),
-                                  child: CreateButton(
-                                    onPressed: () async {
-                                      final formState =
-                                          addEventCubit.formKey.currentState;
-                                      if (formState?.validate() ?? false) {
-                                        addEventCubit.addEvent(
-                                          ownerId: ((context
-                                                  .read<AppStateCubit>()
-                                                  .state) as AuthorizedState)
-                                              .user
-                                              .id,
-                                          title: addEventCubit
-                                              .titleController.text,
-                                          description: addEventCubit
-                                              .descriptionController.text,
-                                          dateTime: DateTime(
-                                            state.date!.year,
-                                            state.date!.month,
-                                            state.date!.day,
-                                            state.time!.hour,
-                                            state.time!.minute,
-                                          ),
-                                          // TODO: add categories
-                                          categoryId: '1234',
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                        if (state is AddEventLoading) ...{
-                          Center(
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        }
-                      ]);
+                            if (state is AddEventLoading) ...{
+                              const CircularLoading(),
+                            }
+                          ],
+                        );
+                      } else {
+                        return const CircularLoading();
+                      }
                     },
                   ),
                 ),

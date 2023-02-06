@@ -5,6 +5,7 @@ import 'package:beluga_calendar/flows/menu/presentation/widgets/menu_drawer.dart
 import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:beluga_calendar/navigation/app_state_cubit/app_state_cubit.dart';
 import 'package:beluga_calendar/services/injectible/injectible_init.dart';
+import 'package:beluga_calendar/widgets/circular_loading.dart';
 import 'package:beluga_calendar/widgets/event_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,39 +50,60 @@ class MainPage extends StatelessWidget {
                               },
                             ),
                             const Spacer(),
-                            EventsFilterButton(onChanged: () {}),
+                            EventsFilterButton(
+                              categories: state.categories,
+                              currentCategoryId: state.selectedCategoryId,
+                              onChanged: (value) => context
+                                  .read<MainPageCubit>()
+                                  .applyFilter(value ?? ''),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 24),
                         Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: ListView.builder(
-                              itemCount: state.events.length,
-                              itemBuilder: (context, index) {
-                                final event = state.events[index];
-
+                          child: ListView.builder(
+                            itemCount: state.events.length,
+                            itemBuilder: (context, index) {
+                              final event = state.events[index];
+                              if (state.selectedCategoryId.isNotEmpty) {
+                                if (event.category.id ==
+                                    state.selectedCategoryId) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 16),
+                                    child: EventItem(
+                                      title: event.title,
+                                      description: event.description.isNotEmpty
+                                          ? event.description
+                                          : 'No description.',
+                                      category: event.category,
+                                      date: event.date,
+                                      time: event.time,
+                                    ),
+                                  );
+                                }
+                              } else {
                                 return Padding(
-                                  padding: const EdgeInsets.only(bottom: 16),
-                                  child: EventItem(
-                                    title: event.title,
-                                    description: event.description.isNotEmpty
-                                        ? event.description
-                                        : 'No description.',
-                                    category: event.category,
-                                    date: event.date,
-                                    time: event.time,
-                                  ),
-                                );
-                              },
-                            ),
+                                    padding: const EdgeInsets.only(bottom: 16),
+                                    child: EventItem(
+                                      title: event.title,
+                                      description: event.description.isNotEmpty
+                                          ? event.description
+                                          : 'No description.',
+                                      category: event.category,
+                                      date: event.date,
+                                      time: event.time,
+                                    ),
+                                  );
+                              }
+                              return Container();
+                            },
                           ),
                         ),
                       ],
                     ),
                   );
                 } else if (state is EventsLoading) {
-                  return const Center(child: Text('Loading...'));
+                  return const CircularLoading();
                 } else if (state is EventsError) {
                   return Center(
                     child: Text(

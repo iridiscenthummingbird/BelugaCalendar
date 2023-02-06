@@ -19,37 +19,38 @@ import '../../domain/auth/repository/auth_repo.dart' as _i18;
 import '../../domain/auth/repository/auth_repo_impl.dart' as _i19;
 import '../../flows/auth/data/repositories/auth_repository_impl.dart' as _i21;
 import '../../flows/auth/domain/repositories/auth_repository.dart' as _i20;
-import '../../flows/auth/domain/usecases/sign_in.dart' as _i27;
-import '../../flows/auth/domain/usecases/sign_out.dart' as _i28;
-import '../../flows/auth/domain/usecases/sign_up.dart' as _i29;
+import '../../flows/auth/domain/usecases/sign_in.dart' as _i28;
+import '../../flows/auth/domain/usecases/sign_out.dart' as _i29;
+import '../../flows/auth/domain/usecases/sign_up.dart' as _i30;
 import '../../flows/auth/presentation/pages/sign_in/cubit/sign_in_cubit.dart'
-    as _i33;
-import '../../flows/auth/presentation/pages/sign_up/cubit/sign_up_cubit.dart'
     as _i34;
+import '../../flows/auth/presentation/pages/sign_up/cubit/sign_up_cubit.dart'
+    as _i35;
 import '../../flows/main/data/datasource/events_datasource.dart' as _i22;
 import '../../flows/main/data/repositories/events_repository_impl.dart' as _i24;
 import '../../flows/main/domain/repositories/events_repository.dart' as _i23;
-import '../../flows/main/domain/usecases/add_event.dart' as _i31;
-import '../../flows/main/domain/usecases/get_users_events.dart' as _i25;
+import '../../flows/main/domain/usecases/add_event.dart' as _i32;
+import '../../flows/main/domain/usecases/get_categories.dart' as _i25;
+import '../../flows/main/domain/usecases/get_users_events.dart' as _i26;
 import '../../flows/main/presentation/pages/add_event/cubit/add_event_cubit.dart'
-    as _i35;
+    as _i36;
 import '../../flows/main/presentation/pages/main/cubit/main_page_cubit.dart'
-    as _i26;
+    as _i27;
 import '../../flows/menu/presentation/pages/calendar_page/cubit/calendar_cubit.dart'
     as _i4;
 import '../../flows/menu/presentation/pages/find_event/cubit/find_event_cubit.dart'
     as _i6;
 import '../../flows/splash/presentation/pages/splash/cubit/splash_cubit.dart'
     as _i15;
-import '../../navigation/app_state_cubit/app_state_cubit.dart' as _i32;
+import '../../navigation/app_state_cubit/app_state_cubit.dart' as _i33;
 import '../../themes/theme_data_values.dart' as _i16;
 import '../app_intenal_notification_system/bloc/app_intenal_notifications_bloc.dart'
     as _i3;
 import '../firestore/firestore_events.dart' as _i9;
 import '../firestore/firestore_users.dart' as _i10;
 import '../navigation_service.dart' as _i12;
-import '../token_service/token_service.dart' as _i30;
-import 'injectible_init.dart' as _i36; // ignore_for_file: unnecessary_lambdas
+import '../token_service/token_service.dart' as _i31;
+import 'injectible_init.dart' as _i37; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -100,33 +101,39 @@ Future<_i1.GetIt> $initGetIt(
       _i22.EventsDataSourceImpl(firestoreEvents: get<_i9.FirestoreEvents>()));
   gh.factory<_i23.EventsRepositoryI>(
       () => _i24.EventsRepositoryImpl(get<_i22.EventsDataSourceI>()));
-  gh.factory<_i25.GetUsersEventsUseCase>(
-      () => _i25.GetUsersEventsUseCase(get<_i23.EventsRepositoryI>()));
-  gh.factory<_i26.MainPageCubit>(() =>
-      _i26.MainPageCubit(getUsersEvents: get<_i25.GetUsersEventsUseCase>()));
-  gh.factory<_i27.SignInUseCase>(
-      () => _i27.SignInUseCase(get<_i20.AuthRepositoryI>()));
-  gh.factory<_i28.SignOutUseCase>(
-      () => _i28.SignOutUseCase(get<_i20.AuthRepositoryI>()));
-  gh.factory<_i29.SignUpUseCase>(
-      () => _i29.SignUpUseCase(get<_i20.AuthRepositoryI>()));
-  gh.singleton<_i30.TokenManager>(_i30.TokenManager(
+  gh.factory<_i25.GetCategoriesUseCase>(
+      () => _i25.GetCategoriesUseCase(get<_i23.EventsRepositoryI>()));
+  gh.factory<_i26.GetUsersEventsUseCase>(
+      () => _i26.GetUsersEventsUseCase(get<_i23.EventsRepositoryI>()));
+  gh.factory<_i27.MainPageCubit>(() => _i27.MainPageCubit(
+        getUsersEvents: get<_i26.GetUsersEventsUseCase>(),
+        getCategories: get<_i25.GetCategoriesUseCase>(),
+      ));
+  gh.factory<_i28.SignInUseCase>(
+      () => _i28.SignInUseCase(get<_i20.AuthRepositoryI>()));
+  gh.factory<_i29.SignOutUseCase>(
+      () => _i29.SignOutUseCase(get<_i20.AuthRepositoryI>()));
+  gh.factory<_i30.SignUpUseCase>(
+      () => _i30.SignUpUseCase(get<_i20.AuthRepositoryI>()));
+  gh.singleton<_i31.TokenManager>(_i31.TokenManager(
     secureStorage: get<_i11.FlutterSecureStorage>(),
     authRepository: get<_i18.AuthRepositoryI>(),
   ));
-  gh.factory<_i31.AddEventUseCase>(
-      () => _i31.AddEventUseCase(get<_i23.EventsRepositoryI>()));
-  gh.factory<_i32.AppStateCubit>(() => _i32.AppStateCubit(
+  gh.factory<_i32.AddEventUseCase>(
+      () => _i32.AddEventUseCase(get<_i23.EventsRepositoryI>()));
+  gh.factory<_i33.AppStateCubit>(() => _i33.AppStateCubit(
         authRepository: get<_i18.AuthRepositoryI>(),
         firebaseAuth: get<_i7.FirebaseAuth>(),
       ));
-  gh.factory<_i33.SignInCubit>(
-      () => _i33.SignInCubit(get<_i27.SignInUseCase>()));
-  gh.factory<_i34.SignUpCubit>(
-      () => _i34.SignUpCubit(get<_i29.SignUpUseCase>()));
-  gh.factory<_i35.AddEventCubit>(
-      () => _i35.AddEventCubit(addEventUseCase: get<_i31.AddEventUseCase>()));
+  gh.factory<_i34.SignInCubit>(
+      () => _i34.SignInCubit(get<_i28.SignInUseCase>()));
+  gh.factory<_i35.SignUpCubit>(
+      () => _i35.SignUpCubit(get<_i30.SignUpUseCase>()));
+  gh.factory<_i36.AddEventCubit>(() => _i36.AddEventCubit(
+        addEventUseCase: get<_i32.AddEventUseCase>(),
+        getCategoriesUseCase: get<_i25.GetCategoriesUseCase>(),
+      ));
   return get;
 }
 
-class _$RegisterModule extends _i36.RegisterModule {}
+class _$RegisterModule extends _i37.RegisterModule {}
