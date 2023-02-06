@@ -71,6 +71,7 @@ class MainPage extends StatelessWidget {
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 16),
                                     child: EventItem(
+                                      id: event.id,
                                       title: event.title,
                                       description: event.description.isNotEmpty
                                           ? event.description
@@ -83,17 +84,18 @@ class MainPage extends StatelessWidget {
                                 }
                               } else {
                                 return Padding(
-                                    padding: const EdgeInsets.only(bottom: 16),
-                                    child: EventItem(
-                                      title: event.title,
-                                      description: event.description.isNotEmpty
-                                          ? event.description
-                                          : 'No description.',
-                                      category: event.category,
-                                      date: event.date,
-                                      time: event.time,
-                                    ),
-                                  );
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: EventItem(
+                                    id: event.id,
+                                    title: event.title,
+                                    description: event.description.isNotEmpty
+                                        ? event.description
+                                        : 'No description.',
+                                    category: event.category,
+                                    date: event.date,
+                                    time: event.time,
+                                  ),
+                                );
                               }
                               return Container();
                             },

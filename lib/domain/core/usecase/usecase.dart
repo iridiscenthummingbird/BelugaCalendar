@@ -15,6 +15,7 @@ class NoParams extends Equatable {
 class AddEventParameters {
   AddEventParameters({
     required this.ownerId,
+    required this.ownerEmail,
     required this.title,
     required this.description,
     required this.categoryId,
@@ -22,9 +23,9 @@ class AddEventParameters {
   });
 
   final String ownerId;
+  final String ownerEmail;
   final String title;
   final String description;
   final String categoryId;
   final DateTime dateTime;
 }
-

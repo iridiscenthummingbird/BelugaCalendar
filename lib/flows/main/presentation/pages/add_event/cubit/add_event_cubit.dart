@@ -70,6 +70,7 @@ class AddEventCubit extends Cubit<AddEventState> {
 
   void addEvent({
     required String ownerId,
+    required String ownerEmail,
     required String title,
     required String description,
     required DateTime dateTime,
@@ -85,6 +86,7 @@ class AddEventCubit extends Cubit<AddEventState> {
     );
     final event = AddEventParameters(
       ownerId: ownerId,
+      ownerEmail: ownerEmail,
       title: title,
       description: description,
       categoryId: categoryId,

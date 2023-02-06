@@ -29,7 +29,7 @@ class CalendarCubit extends Cubit<CalendarState> {
   void onDaySelected(
     DateTime selectedDay,
     DateTime focusedDay,
-    List<dynamic> selectedEvents,
+    List<Event> selectedEvents,
   ) =>
       emit(
         state.copyWith(

@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'navigation/app_state_cubit/app_state_cubit.dart';
 import 'navigation/helpers/title_observer.dart';
@@ -55,7 +54,6 @@ class App extends StatelessWidget {
               routesBuilder: (context) => state.routeMap,
             ),
             localizationsDelegates: const [
-              AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,

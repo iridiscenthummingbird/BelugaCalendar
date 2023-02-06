@@ -8,9 +8,17 @@ import 'package:injectable/injectable.dart';
 
 abstract class EventsDataSourceI {
   Future<List<EventModel>> getUsersEvents(UserModel user);
+  Future<EventModel> getEvent(String eventId, UserModel user);
   Future<List<EventModel>> getUsersEventsForMonth(
       UserModel user, DateTime choosenMonth);
   Future<void> addEvent(AddEventParameters event);
+  Future<void> updateEvent(
+    String id,
+    String title,
+    String description,
+    DateTime dateTime,
+  );
+
   Future<List<CategoryModel>> getCategories();
 }
 
@@ -58,6 +66,40 @@ class EventsDataSourceImpl implements EventsDataSourceI {
       final events =
           await firestoreEvents.getUsersEventsForMonth(user.id, choosenMonth);
       return events;
+    } catch (exception) {
+      throw ServerFailure(message: 'Something went wrong: $exception');
+    }
+  }
+
+  @override
+  Future<EventModel> getEvent(String eventId, UserModel user) async {
+    try {
+      final event = await firestoreEvents.getEvent(eventId);
+
+      if (event.participantsIds.contains(user.id)) {
+        return event;
+      } else {
+        throw Exception('You don\'t have access to this event.');
+      }
+    } catch (exception) {
+      throw ServerFailure(message: 'Something went wrong: $exception');
+    }
+  }
+
+  @override
+  Future<void> updateEvent(
+    String id,
+    String title,
+    String description,
+    DateTime dateTime,
+  ) async {
+    try {
+      await firestoreEvents.updateEvent(
+        id,
+        title,
+        description,
+        dateTime,
+      );
     } catch (exception) {
       throw ServerFailure(message: 'Something went wrong: $exception');
     }

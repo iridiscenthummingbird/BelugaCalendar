@@ -56,6 +56,7 @@ dependencies:
   phone_number: ^1.0.0
   collection: ^1.16.0
   flutter_contacts: ^1.1.5+1
+  share_plus: ^6.3.0
 
   #  IMAGES
   cached_network_image: ^3.1.0

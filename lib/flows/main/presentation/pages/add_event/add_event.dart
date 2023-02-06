@@ -24,9 +24,9 @@ class AddEventPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create event'),
-        leading: InkWell(
-          onTap: () => Routemaster.of(context).pop(),
-          child: SvgPicture.asset(
+        leading: IconButton(
+          onPressed: () => Routemaster.of(context).pop(),
+          icon: SvgPicture.asset(
             Assets.icons.back.path,
             height: 24,
             width: 24,
@@ -234,13 +234,14 @@ class AddEventPage extends StatelessWidget {
                                           if (formState?.validate() ?? false) {
                                             if (state.selectedCategoryId !=
                                                 null) {
+                                              final user = ((context
+                                                          .read<AppStateCubit>()
+                                                          .state)
+                                                      as AuthorizedState)
+                                                  .user;
                                               addEventCubit.addEvent(
-                                                ownerId: ((context
-                                                            .read<AppStateCubit>()
-                                                            .state)
-                                                        as AuthorizedState)
-                                                    .user
-                                                    .id,
+                                                ownerId: user.id,
+                                                ownerEmail: user.email ?? '',
                                                 title: addEventCubit
                                                     .titleController.text,
                                                 description: addEventCubit

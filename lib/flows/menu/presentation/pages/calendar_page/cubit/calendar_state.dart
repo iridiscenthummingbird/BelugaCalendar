@@ -4,7 +4,7 @@ class CalendarState extends Equatable {
   final DateTime focusedDay;
   final DateTime selectedDay;
   final CalendarFormat calendarFormat;
-  final List selectedEvents;
+  final List<Event> selectedEvents;
   final LinkedHashMap<DateTime, List<Event>> monthEvents;
 
   const CalendarState({
@@ -28,7 +28,7 @@ class CalendarState extends Equatable {
     DateTime? focusedDay,
     DateTime? selectedDay,
     CalendarFormat? calendarFormat,
-    List? selectedEvents,
+    List<Event>? selectedEvents,
     LinkedHashMap<DateTime, List<Event>>? monthEvent,
   }) {
     return CalendarState(
