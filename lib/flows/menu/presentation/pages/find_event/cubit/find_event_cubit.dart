@@ -39,8 +39,8 @@ class FindEventCubit extends Cubit<FindEventState> {
           ),
         );
       },
-      (result) {
-        emit(FindEventSuccess());
+      (id) {
+        emit(FindEventSuccess(id));
       },
     );
   }

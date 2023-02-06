@@ -18,7 +18,7 @@ abstract class EventsDataSourceI {
     String description,
     DateTime dateTime,
   );
-  Future<void> addParticipant({
+  Future<String> addParticipant({
     required String shareCode,
     required String participantId,
     required String participantEmail,
@@ -111,13 +111,13 @@ class EventsDataSourceImpl implements EventsDataSourceI {
   }
 
   @override
-  Future<void> addParticipant({
+  Future<String> addParticipant({
     required String shareCode,
     required String participantId,
     required String participantEmail,
   }) async {
     try {
-      await firestoreEvents.addParticipant(
+      return await firestoreEvents.addParticipant(
         shareCode: shareCode,
         participantId: participantId,
         participantEmail: participantEmail,

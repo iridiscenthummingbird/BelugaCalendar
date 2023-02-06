@@ -5,13 +5,13 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class AddParticipantUseCase implements UseCase<void, AddParticipantParams> {
+class AddParticipantUseCase implements UseCase<String, AddParticipantParams> {
   final EventsRepositoryI repository;
 
   AddParticipantUseCase(this.repository);
 
   @override
-  Future<Either<Failure, void>> call(AddParticipantParams params) async {
+  Future<Either<Failure, String>> call(AddParticipantParams params) async {
     return await repository.addParticipant(params);
   }
 }

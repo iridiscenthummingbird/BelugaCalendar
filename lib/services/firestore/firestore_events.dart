@@ -231,7 +231,7 @@ class FirestoreEvents {
     return null;
   }
 
-  Future<void> addParticipant({
+  Future<String> addParticipant({
     required String shareCode,
     required String participantId,
     required String participantEmail,
@@ -254,6 +254,7 @@ class FirestoreEvents {
       } else {
         throw Exception('You are already added to this event');
       }
+      return eventDoc.first.id;
     } else {
       throw Exception('Wrong invite code');
     }

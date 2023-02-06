@@ -11,7 +11,11 @@ class FindEventInitial extends FindEventState {}
 
 class FindEventLoading extends FindEventState {}
 
-class FindEventSuccess extends FindEventState {}
+class FindEventSuccess extends FindEventState {
+  final String eventId;
+
+  const FindEventSuccess(this.eventId);
+}
 
 class FindEventError extends FindEventState {
   const FindEventError({
