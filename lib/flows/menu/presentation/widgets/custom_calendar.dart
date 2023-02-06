@@ -8,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../../navigation/app_state_cubit/app_state_cubit.dart';
+
 class CustomCalendar extends StatefulWidget {
   const CustomCalendar({super.key});
 
@@ -48,8 +50,13 @@ class _CustomCalendarState extends State<CustomCalendar> {
             focusedDay: state.focusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
-            onPageChanged: (currentMonth) =>
-                context.read<CalendarCubit>().loadMonth(currentMonth),
+            onPageChanged: (currentMonth) {
+              context.read<CalendarCubit>().loadMonth(
+                    currentMonth,
+                    (context.read<AppStateCubit>().state as AuthorizedState)
+                        .user,
+                  );
+            },
             selectedDayPredicate: (day) => isSameDay(day, state.selectedDay),
             onDaySelected: (selectedDay, focusedDay) {
               if (!isSameDay(state.selectedDay, selectedDay)) {
@@ -106,25 +113,26 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
   List<Event> _getEventsForDay(
       DateTime day, LinkedHashMap<DateTime, List<Event>> monthEvents) {
-    return monthEvents[day] ?? [];
+    return monthEvents[DateTime(day.year, day.month, day.day)] ?? [];
   }
 
   CalendarBuilders _calendarBuilders(
       LinkedHashMap<DateTime, List<Event>> monthEvents) {
     return CalendarBuilders(
-      markerBuilder: (context, day, events) => _getEventsForDay(day, monthEvents).isNotEmpty
-          ? Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: 7,
-                height: 7,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xFF251460),
-                ),
-              ),
-            )
-          : null,
+      markerBuilder: (context, day, events) =>
+          _getEventsForDay(day, monthEvents).isNotEmpty
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: 7,
+                    height: 7,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFF251460),
+                    ),
+                  ),
+                )
+              : null,
       defaultBuilder: (context, day, focusedDay) => Center(
         child: Text(
           '${day.day}',

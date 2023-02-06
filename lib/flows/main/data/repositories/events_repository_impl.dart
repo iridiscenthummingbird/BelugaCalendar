@@ -8,6 +8,8 @@ import 'package:beluga_calendar/flows/main/domain/repositories/events_repository
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../domain/usecases/get_events_for_month.dart';
+
 @Injectable(as: EventsRepositoryI)
 class EventsRepositoryImpl implements EventsRepositoryI {
   final EventsDataSourceI remoteDataSource;
@@ -28,19 +30,33 @@ class EventsRepositoryImpl implements EventsRepositoryI {
   Future<Either<Failure, void>> addEvent(AddEventParameters event) async {
     try {
       final result = await remoteDataSource.addEvent(event);
-      return(Right(result));
+      return (Right(result));
     } on ServerFailure catch (exception) {
       return Left(exception);
     }
   }
-  
+
   @override
   Future<Either<Failure, List<Category>>> getCategories() async {
     try {
       final result = await remoteDataSource.getCategories();
-      return(Right(result));
+      return (Right(result));
     } on ServerFailure catch (exception) {
       return Left(exception);
     }
-  }  
+  }
+
+  @override
+  Future<Either<Failure, List<Event>>> getUsersEventsForMonth(
+      EventsForMonthParams params) async {
+    try {
+      final result = await remoteDataSource.getUsersEventsForMonth(
+        params.user,
+        params.choosedMonth,
+      );
+      return Right(result);
+    } on ServerFailure catch (exception) {
+      return Left(exception);
+    }
+  }
 }

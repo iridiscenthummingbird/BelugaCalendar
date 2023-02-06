@@ -53,6 +53,50 @@ class FirestoreEvents {
     return events;
   }
 
+  Future<List<EventModel>> getUsersEventsForMonth(
+      String userId, DateTime choosedMonth) async {
+    final categories = await getCategories();
+
+    final startDate = DateTime(choosedMonth.year, choosedMonth.month);
+    final endDate = startDate.add(const Duration(days: 31));
+
+    final result = await _eventsCollection
+        .where('ownerId', isEqualTo: userId)
+        .where('dateTime', isGreaterThanOrEqualTo: startDate)
+        .where('dateTime', isLessThan: endDate)
+        .get();
+
+    final resultDocs = result.docs;
+    final events = resultDocs.map((e) {
+      final eventData = e.data();
+      final category =
+          categories.firstWhereOrNull((c) => c.id == eventData['categoryId']) ??
+              CategoryModel(
+                id: 'EntqdLTYjNqxM6c4uxNT',
+                name: 'Study',
+                color: const Color(0xffAD00FF),
+              );
+
+      return EventModel(
+        title: eventData['title'],
+        description: eventData['description'],
+        date: DateFormat('dd.MM.yyy').format(eventData['dateTime'].toDate()),
+        time: DateFormat.Hm().format(eventData['dateTime'].toDate()),
+        dateTime: eventData['dateTime'].toDate(),
+        // TODO: implement categories
+        category: category,
+        participantsIds:
+            eventData['participantsIds']?.cast<String>().toList() ??
+                List<String>.empty(),
+      );
+    }).toList();
+    events.sort(
+      (a, b) => a.dateTime.compareTo(b.dateTime),
+    );
+
+    return events;
+  }
+
   Future<void> addEvent(AddEventParameters event) async {
     await _eventsCollection.add(
       {

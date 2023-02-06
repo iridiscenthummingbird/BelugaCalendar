@@ -1,33 +1,29 @@
 import 'package:beluga_calendar/flows/menu/presentation/pages/calendar_page/cubit/calendar_cubit.dart';
 import 'package:beluga_calendar/flows/menu/presentation/widgets/custom_calendar.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
+import 'package:beluga_calendar/navigation/app_state_cubit/app_state_cubit.dart';
 import 'package:beluga_calendar/services/injectible/injectible_init.dart';
 import 'package:beluga_calendar/widgets/event_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class CalendarPage extends StatefulWidget {
+class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
 
   static const String path = '/calendar';
 
   @override
-  State<CalendarPage> createState() => _CalendarPageState();
-}
-
-class _CalendarPageState extends State<CalendarPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    print('build');
     return Scaffold(
       body: SafeArea(
         child: BlocProvider(
-          create: (context) => getIt<CalendarCubit>()..loadMonth(DateTime.now()),
+          create: (context) => getIt<CalendarCubit>()
+            ..loadMonth(
+              DateTime.now(),
+              (context.read<AppStateCubit>().state as AuthorizedState).user,
+            ),
           child: BlocBuilder<CalendarCubit, CalendarState>(
             builder: (context, state) {
               return Padding(
