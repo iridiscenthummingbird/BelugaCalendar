@@ -50,8 +50,9 @@ class FirestoreEvents {
 
   Future<List<EventModel>> getUsersEvents(String userId) async {
     final categories = await getCategories();
-    final result =
-        await _eventsCollection.where('ownerId', isEqualTo: userId).get();
+    final result = await _eventsCollection
+        .where('participantsIds', arrayContains: userId)
+        .get();
     final resultDocs = result.docs;
     final events = resultDocs.map((item) {
       final eventData = item.data();
@@ -97,7 +98,7 @@ class FirestoreEvents {
     final endDate = startDate.add(const Duration(days: 31));
 
     final result = await _eventsCollection
-        .where('ownerId', isEqualTo: userId)
+        .where('participantsIds', arrayContains: userId)
         .where('dateTime', isGreaterThanOrEqualTo: startDate)
         .where('dateTime', isLessThan: endDate)
         .get();
@@ -186,5 +187,33 @@ class FirestoreEvents {
         'description': description,
       },
     );
+  }
+
+  Future<void> addParticipant({
+    required String shareCode,
+    required String participantId,
+    required String participantEmail,
+  }) async {
+    final eventDoc =
+        (await _eventsCollection.where('shareCode', isEqualTo: shareCode).get())
+            .docs;
+    if (eventDoc.isNotEmpty) {
+      final eventData = eventDoc.first.data();
+      final List<String> currentParticipants =
+          eventData['participantsIds']?.cast<String>().toList();
+      final isParticipantAdded =
+          currentParticipants.where((e) => e == participantId).isNotEmpty;
+      if (!isParticipantAdded) {
+        final eventReference = eventDoc.first.reference;
+        eventReference.update({
+          'participantsIds': FieldValue.arrayUnion([participantId]),
+          'participantsEmails': FieldValue.arrayUnion([participantEmail]),
+        });
+      } else {
+        throw Exception('You are already added to this event');
+      }
+    } else {
+      throw Exception('Wrong invite code');
+    }
   }
 }

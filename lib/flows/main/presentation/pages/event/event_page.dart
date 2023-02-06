@@ -183,15 +183,13 @@ class EventPage extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
+                            const SizedBox(height: 10),
                             ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: event.participantsEmails.length,
                               itemBuilder: (context, index) {
-                                return ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(event.participantsEmails[index]),
-                                );
+                                return Text(event.participantsEmails[index]);
                               },
                             ),
                           ],
