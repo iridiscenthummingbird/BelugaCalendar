@@ -18,6 +18,11 @@ abstract class EventsDataSourceI {
     String description,
     DateTime dateTime,
   );
+  Future<void> addParticipant({
+    required String shareCode,
+    required String participantId,
+    required String participantEmail,
+  });
 
   Future<List<CategoryModel>> getCategories();
 }
@@ -102,6 +107,23 @@ class EventsDataSourceImpl implements EventsDataSourceI {
       );
     } catch (exception) {
       throw ServerFailure(message: 'Something went wrong: $exception');
+    }
+  }
+
+  @override
+  Future<void> addParticipant({
+    required String shareCode,
+    required String participantId,
+    required String participantEmail,
+  }) async {
+    try {
+      await firestoreEvents.addParticipant(
+        shareCode: shareCode,
+        participantId: participantId,
+        participantEmail: participantEmail,
+      );
+    } catch (exception) {
+      throw ServerFailure(message: '$exception');
     }
   }
 }

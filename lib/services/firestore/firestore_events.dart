@@ -54,8 +54,9 @@ class FirestoreEvents {
 
   Future<List<EventModel>> getUsersEvents(String userId) async {
     final categories = await getCategories();
-    final result =
-        await _eventsCollection.where('ownerId', isEqualTo: userId).get();
+    final result = await _eventsCollection
+        .where('participantsIds', arrayContains: userId)
+        .get();
     final resultDocs = result.docs;
     final eventsFuture = resultDocs.map((item) async {
       final eventData = item.data();
@@ -107,7 +108,7 @@ class FirestoreEvents {
     final endDate = startDate.add(const Duration(days: 31));
 
     final result = await _eventsCollection
-        .where('ownerId', isEqualTo: userId)
+        .where('participantsIds', arrayContains: userId)
         .where('dateTime', isGreaterThanOrEqualTo: startDate)
         .where('dateTime', isLessThan: endDate)
         .get();
@@ -157,7 +158,7 @@ class FirestoreEvents {
 
   Future<void> addEvent(AddEventParameters event) async {
     final shareCode = DateTime.now().millisecondsSinceEpoch - 1675690000000;
-    String filePath = '';
+    String? filePath = null;
     if (event.file != null) {
       final storageRef = FirebaseStorage.instance.ref();
       final cuted = event.file!.path.split('/');
@@ -176,9 +177,7 @@ class FirestoreEvents {
         'participantsIds': [event.ownerId],
         'participantsEmails': [event.ownerEmail],
         'shareCode': '$shareCode',
-        if (event.file != null) ...{
-          'filePath': filePath,
-        },
+        'filePath': filePath,
       },
     );
   }
@@ -230,5 +229,33 @@ class FirestoreEvents {
       }
     } catch (_) {}
     return null;
+  }
+
+  Future<void> addParticipant({
+    required String shareCode,
+    required String participantId,
+    required String participantEmail,
+  }) async {
+    final eventDoc =
+        (await _eventsCollection.where('shareCode', isEqualTo: shareCode).get())
+            .docs;
+    if (eventDoc.isNotEmpty) {
+      final eventData = eventDoc.first.data();
+      final List<String> currentParticipants =
+          eventData['participantsIds']?.cast<String>().toList();
+      final isParticipantAdded =
+          currentParticipants.where((e) => e == participantId).isNotEmpty;
+      if (!isParticipantAdded) {
+        final eventReference = eventDoc.first.reference;
+        eventReference.update({
+          'participantsIds': FieldValue.arrayUnion([participantId]),
+          'participantsEmails': FieldValue.arrayUnion([participantEmail]),
+        });
+      } else {
+        throw Exception('You are already added to this event');
+      }
+    } else {
+      throw Exception('Wrong invite code');
+    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:beluga_calendar/flows/main/data/datasource/events_datasource.dar
 import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
 import 'package:beluga_calendar/flows/main/domain/entities/event.dart';
 import 'package:beluga_calendar/flows/main/domain/repositories/events_repository.dart';
+import 'package:beluga_calendar/flows/main/domain/usecases/add_participant.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/get_event.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/update_event.dart';
 import 'package:dartz/dartz.dart';
@@ -83,6 +84,21 @@ class EventsRepositoryImpl implements EventsRepositoryI {
         params.title,
         params.description,
         params.dateTime,
+      );
+      return Right(result);
+    } on ServerFailure catch (exception) {
+      return Left(exception);
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addParticipant(
+      AddParticipantParams params) async {
+    try {
+      final result = await remoteDataSource.addParticipant(
+        shareCode: params.shareCode,
+        participantId: params.participantId,
+        participantEmail: params.participantEmail,
       );
       return Right(result);
     } on ServerFailure catch (exception) {

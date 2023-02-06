@@ -8,3 +8,15 @@ abstract class FindEventState extends Equatable {
 }
 
 class FindEventInitial extends FindEventState {}
+
+class FindEventLoading extends FindEventState {}
+
+class FindEventSuccess extends FindEventState {}
+
+class FindEventError extends FindEventState {
+  const FindEventError({
+    required this.failure,
+  });
+
+  final Failure failure;
+}
