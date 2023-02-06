@@ -75,6 +75,7 @@ dependencies:
   geolocator: ^9.0.2
   visibility_detector: ^0.3.3
   table_calendar: ^3.0.8
+  add_2_calendar: ^2.1.2
 
 dev_dependencies:
   flutter_test:

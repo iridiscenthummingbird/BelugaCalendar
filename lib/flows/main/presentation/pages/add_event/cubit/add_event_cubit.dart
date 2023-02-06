@@ -1,6 +1,7 @@
 import 'package:beluga_calendar/domain/core/errors/failures.dart';
 import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/add_event.dart';
+import 'package:beluga_calendar/services/add_to_calendar_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,6 +60,7 @@ class AddEventCubit extends Cubit<AddEventState> {
         );
       },
       (eventsList) {
+        AddToCalendarService.addToCalendar(event);
         emit(const AddEventSuccess());
       },
     );
@@ -84,7 +86,7 @@ class AddEventCubit extends Cubit<AddEventState> {
       ),
     );
   }
-  
+
   @override
   Future<void> close() {
     titleController.dispose();

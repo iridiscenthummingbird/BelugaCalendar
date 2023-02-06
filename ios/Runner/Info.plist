@@ -4,6 +4,8 @@
 <dict>
 	<key>NSContactsUsageDescription</key>
     <string>For saving contacts</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>For adding events to calendar</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
