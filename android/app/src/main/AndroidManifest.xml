@@ -11,9 +11,10 @@
         </intent>
     </queries>
    <application
-        android:label="beluga_calendar"
+        android:label="Beluga Calendar"
+        android:lines="2"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
