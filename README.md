@@ -1,15 +1,10 @@
-# beluga_calendar
+# Beluga Time
 
-A new Flutter project.
+Developed by The Big Bad Beluga Whales
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- [User manual](https://drive.google.com/file/d/1PXDhSh-U9FINnY8tAfkKdw1HvRnq0cKq/view?usp=share_link)
+- [Firebase App Distribution](https://appdistribution.firebase.dev/i/5b095e5480560ae9)
+- [APK](https://drive.google.com/file/d/1gghTLg2UP5i1DAvkpQ4c9I7XloMbIr2q/view?usp=share_link)
 
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
