@@ -4,6 +4,7 @@ import 'package:beluga_calendar/domain/shared_models/api/user_model.dart';
 import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
 import 'package:beluga_calendar/flows/main/domain/entities/event.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/add_participant.dart';
+import 'package:beluga_calendar/flows/main/domain/usecases/delete_participant.dart';
 import 'package:dartz/dartz.dart';
 
 import '../usecases/get_event.dart';
@@ -19,4 +20,5 @@ abstract class EventsRepositoryI {
   Future<Either<Failure, List<Category>>> getCategories();
   Future<Either<Failure, void>> updateEvent(UpdateEventParams params);
   Future<Either<Failure, void>> addParticipant(AddParticipantParams params);
+  Future<Either<Failure, void>> deleteParticipant(DeleteParticipantParams params);
 }

@@ -1,7 +1,10 @@
 import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
 import 'package:beluga_calendar/flows/main/presentation/pages/event/event_page.dart';
+import 'package:beluga_calendar/flows/main/presentation/pages/main/cubit/main_page_cubit.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
+import 'package:beluga_calendar/navigation/app_state_cubit/app_state_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -30,17 +33,21 @@ class EventItem extends StatelessWidget {
       shadowColor: Colors.grey.shade100,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           String path = Routemaster.of(context).currentRoute.path;
           if (path == '/') {
             path = '';
           }
-          Routemaster.of(context).push(
+          final leftEvent = await Routemaster.of(context).push<bool>(
             path + EventPage.path,
             queryParameters: {
               'id': id,
             },
-          );
+          ).result;
+          if (leftEvent ?? false) {
+            context.read<MainPageCubit>().loadEvents(
+                (context.read<AppStateCubit>().state as AuthorizedState).user);
+          }
         },
         child: Ink(
           height: 140,

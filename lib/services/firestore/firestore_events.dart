@@ -216,4 +216,12 @@ class FirestoreEvents {
       throw Exception('Wrong invite code');
     }
   }
+
+  Future<void> deleteParticipant({required String eventId, required String participantId, required String participantEmail}) async {
+    final eventDoc = await _eventsCollection.doc(eventId).get();
+    eventDoc.reference.update({
+      'participantsIds': FieldValue.arrayRemove([participantId]),
+      'participantsEmails': FieldValue.arrayRemove([participantEmail]),
+    });
+  }
 }

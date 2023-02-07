@@ -6,6 +6,7 @@ import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
 import 'package:beluga_calendar/flows/main/domain/entities/event.dart';
 import 'package:beluga_calendar/flows/main/domain/repositories/events_repository.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/add_participant.dart';
+import 'package:beluga_calendar/flows/main/domain/usecases/delete_participant.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/get_event.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/update_event.dart';
 import 'package:dartz/dartz.dart';
@@ -97,6 +98,21 @@ class EventsRepositoryImpl implements EventsRepositoryI {
     try {
       final result = await remoteDataSource.addParticipant(
         shareCode: params.shareCode,
+        participantId: params.participantId,
+        participantEmail: params.participantEmail,
+      );
+      return Right(result);
+    } on ServerFailure catch (exception) {
+      return Left(exception);
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteParticipant(
+      DeleteParticipantParams params) async {
+    try {
+      final result = await remoteDataSource.deleteParticipant(
+        eventId: params.eventId,
         participantId: params.participantId,
         participantEmail: params.participantEmail,
       );
