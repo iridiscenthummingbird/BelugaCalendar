@@ -19,6 +19,6 @@ abstract class EventsRepositoryI {
   Future<Either<Failure, void>> addEvent(AddEventParameters event);
   Future<Either<Failure, List<Category>>> getCategories();
   Future<Either<Failure, void>> updateEvent(UpdateEventParams params);
-  Future<Either<Failure, void>> addParticipant(AddParticipantParams params);
+  Future<Either<Failure, String>> addParticipant(AddParticipantParams params);
   Future<Either<Failure, void>> deleteParticipant(DeleteParticipantParams params);
 }

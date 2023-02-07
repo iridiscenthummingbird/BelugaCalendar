@@ -32,6 +32,7 @@ dependencies:
   firebase_core: ^2.3.0
   firebase_messaging: ^14.1.2
   firebase_auth: ^4.2.5
+  firebase_storage: ^11.0.10
   cloud_firestore: ^4.3.1
   flutter_local_notifications: ^12.0.4
 
@@ -57,6 +58,7 @@ dependencies:
   collection: ^1.16.0
   flutter_contacts: ^1.1.5+1
   share_plus: ^6.3.0
+  file_picker: ^5.2.5
 
   #  IMAGES
   cached_network_image: ^3.1.0
@@ -85,6 +87,7 @@ dev_dependencies:
   build_runner: ^2.2.0
   flutter_gen_runner: ^5.1.0
   injectable_generator: ^1.5.4
+  flutter_launcher_icons: ^0.11.0
 
 flutter_gen:
   output: lib/gen/
@@ -95,6 +98,13 @@ flutter_gen:
     flare_flutter: true
     rive: true
     lottie: true
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/beluga_logo.png"
+  adaptive_icon_background: "assets/logo_background.png"
+  adaptive_icon_foreground: "assets/beluga_logo.png"
 
 flutter:
   uses-material-design: true

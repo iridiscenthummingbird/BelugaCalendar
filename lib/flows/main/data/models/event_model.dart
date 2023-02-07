@@ -13,5 +13,7 @@ class EventModel extends Event {
     required super.participantsIds,
     required super.participantsEmails,
     required super.dateTime,
+    required super.file,
+    required super.fileName,
   });
 }

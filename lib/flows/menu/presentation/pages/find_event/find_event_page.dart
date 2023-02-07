@@ -1,3 +1,4 @@
+import 'package:beluga_calendar/flows/main/presentation/pages/event/event_page.dart';
 import 'package:beluga_calendar/flows/menu/presentation/pages/find_event/widgets/code_textfield.dart';
 import 'package:beluga_calendar/navigation/app_state_cubit/app_state_cubit.dart';
 import 'package:beluga_calendar/services/injectible/injectible_init.dart';
@@ -24,7 +25,12 @@ class FindEventPage extends StatelessWidget {
         child: BlocListener<FindEventCubit, FindEventState>(
           listener: (context, state) {
             if (state is FindEventSuccess) {
-              Routemaster.of(context).pop(true);
+              Routemaster.of(context).push(
+                EventPage.path,
+                queryParameters: {
+                  'id': state.eventId,
+                },
+              );
             } else if (state is FindEventError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.failure.message)),
@@ -52,7 +58,8 @@ class FindEventPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 16),
                             CodeTextField(
-                              controller: context.read<FindEventCubit>().controller,
+                              controller:
+                                  context.read<FindEventCubit>().controller,
                             ),
                             const SizedBox(height: 16),
                             Material(
@@ -65,8 +72,9 @@ class FindEventPage extends StatelessWidget {
                                       .formKey
                                       .currentState
                                       ?.validate();
-                                  final user = (context.read<AppStateCubit>().state
-                                          as AuthorizedState)
+                                  final user = (context
+                                          .read<AppStateCubit>()
+                                          .state as AuthorizedState)
                                       .user;
                                   if (isValid == true) {
                                     context.read<FindEventCubit>().findEvent(
@@ -82,8 +90,8 @@ class FindEventPage extends StatelessWidget {
                                   ),
                                   child: Center(
                                     child: Padding(
-                                      padding:
-                                          const EdgeInsets.symmetric(vertical: 15),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15),
                                       child: Text(
                                         'Find event',
                                         style: TextStyle(
@@ -103,7 +111,7 @@ class FindEventPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (state is FindEventLoading)...{
+                  if (state is FindEventLoading) ...{
                     const CircularLoading(),
                   }
                 ],

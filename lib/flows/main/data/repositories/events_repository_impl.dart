@@ -93,7 +93,7 @@ class EventsRepositoryImpl implements EventsRepositoryI {
   }
 
   @override
-  Future<Either<Failure, void>> addParticipant(
+  Future<Either<Failure, String>> addParticipant(
       AddParticipantParams params) async {
     try {
       final result = await remoteDataSource.addParticipant(

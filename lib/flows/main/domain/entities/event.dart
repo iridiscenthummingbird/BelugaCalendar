@@ -1,4 +1,5 @@
 import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Event {
   const Event({
@@ -13,7 +14,8 @@ class Event {
     required this.participantsIds,
     required this.participantsEmails,
     required this.dateTime,
-    // required this.filePathes,
+    required this.file,
+    required this.fileName,
   });
 
   final String id;
@@ -27,5 +29,6 @@ class Event {
   final List<String> participantsIds;
   final List<String> participantsEmails;
   final DateTime dateTime;
-  // final List<String> filePathes;
+  final XFile? file;
+  final String? fileName;
 }
