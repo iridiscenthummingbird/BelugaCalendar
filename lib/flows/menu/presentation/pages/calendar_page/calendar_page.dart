@@ -15,7 +15,6 @@ class CalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     return Scaffold(
       body: SafeArea(
         child: BlocProvider(
@@ -95,6 +94,7 @@ class CalendarPage extends StatelessWidget {
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 16),
                                   child: EventItem(
+                                    id: event.id,
                                     title: event.title,
                                     description: event.description.isNotEmpty
                                         ? event.description

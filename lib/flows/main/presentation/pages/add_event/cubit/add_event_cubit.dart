@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:beluga_calendar/domain/core/errors/failures.dart';
 import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
@@ -5,6 +7,7 @@ import 'package:beluga_calendar/flows/main/domain/usecases/add_event.dart';
 import 'package:beluga_calendar/services/add_to_calendar_service.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/get_categories.dart';
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -44,6 +47,7 @@ class AddEventCubit extends Cubit<AddEventState> {
             selectedCategoryId: state.selectedCategoryId,
             categories: state.categories,
             failure: failure,
+            file: state.file,
           ),
         );
       },
@@ -54,6 +58,7 @@ class AddEventCubit extends Cubit<AddEventState> {
             time: state.time,
             selectedCategoryId: state.selectedCategoryId,
             categories: categories,
+            file: state.file,
           ),
         );
       },
@@ -64,12 +69,14 @@ class AddEventCubit extends Cubit<AddEventState> {
     emit(
       state.copyWith(
         selectedCategoryId: category.id,
+        file: state.file,
       ),
     );
   }
 
   void addEvent({
     required String ownerId,
+    required String ownerEmail,
     required String title,
     required String description,
     required DateTime dateTime,
@@ -81,14 +88,17 @@ class AddEventCubit extends Cubit<AddEventState> {
         time: state.time,
         selectedCategoryId: state.selectedCategoryId,
         categories: state.categories,
+        file: state.file,
       ),
     );
     final event = AddEventParameters(
       ownerId: ownerId,
+      ownerEmail: ownerEmail,
       title: title,
       description: description,
       categoryId: categoryId,
       dateTime: dateTime,
+      file: state.file,
     );
     final result = await addEventUseCase(event);
     result.fold(
@@ -100,6 +110,7 @@ class AddEventCubit extends Cubit<AddEventState> {
             selectedCategoryId: state.selectedCategoryId,
             categories: state.categories,
             failure: failure,
+            file: state.file,
           ),
         );
       },
@@ -119,6 +130,7 @@ class AddEventCubit extends Cubit<AddEventState> {
         time: state.time,
         selectedCategoryId: state.selectedCategoryId,
         categories: state.categories,
+        file: state.file,
       ),
     );
   }
@@ -131,6 +143,7 @@ class AddEventCubit extends Cubit<AddEventState> {
         time: time,
         selectedCategoryId: state.selectedCategoryId,
         categories: state.categories,
+        file: state.file,
       ),
     );
   }
@@ -142,5 +155,28 @@ class AddEventCubit extends Cubit<AddEventState> {
     timeController.dispose();
     descriptionController.dispose();
     return super.close();
+  }
+
+  Future<void> addFile(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      final length = await file.length();
+
+      if (length < 10485760) {
+        emit(state.copyWith(file: file));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('File is too large'),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> deleteFile() async {
+    emit(state.copyWith(file: null));
   }
 }

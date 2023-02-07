@@ -5,6 +5,7 @@ class AddEventState extends Equatable {
     this.date,
     this.time,
     this.selectedCategoryId,
+    this.file,
     this.categories = const [],
   });
 
@@ -12,21 +13,30 @@ class AddEventState extends Equatable {
   final TimeOfDay? time;
   final String? selectedCategoryId;
   final List<Category> categories;
+  final File? file;
 
   @override
-  List<Object?> get props => [date, time, selectedCategoryId, categories];
+  List<Object?> get props => [
+        date,
+        time,
+        selectedCategoryId,
+        categories,
+        file,
+      ];
 
   AddEventState copyWith({
     DateTime? date,
     TimeOfDay? time,
     String? selectedCategoryId,
     List<Category>? categories,
+    File? file,
   }) {
     return AddEventState(
       date: date ?? this.date,
       time: time ?? this.time,
       selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
       categories: categories ?? this.categories,
+      file: file,
     );
   }
 }
@@ -41,6 +51,7 @@ class AddEventInitial extends AddEventState {
     super.time,
     super.selectedCategoryId,
     super.categories,
+    super.file,
   });
 }
 
@@ -49,6 +60,7 @@ class AddEventLoading extends AddEventState {
     super.date,
     super.time,
     super.selectedCategoryId,
+    super.file,
     super.categories,
   });
 }
@@ -58,6 +70,7 @@ class AddEventSuccess extends AddEventState {
     super.date,
     super.time,
     super.selectedCategoryId,
+    super.file,
     super.categories,
   });
 }
@@ -68,6 +81,7 @@ class AddEventError extends AddEventState {
     super.date,
     super.time,
     super.selectedCategoryId,
+    super.file,
     super.categories,
   });
 

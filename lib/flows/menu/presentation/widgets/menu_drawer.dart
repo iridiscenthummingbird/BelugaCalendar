@@ -1,3 +1,4 @@
+import 'package:beluga_calendar/flows/main/presentation/pages/main/cubit/main_page_cubit.dart';
 import 'package:beluga_calendar/flows/menu/presentation/pages/calendar_page/calendar_page.dart';
 import 'package:beluga_calendar/flows/menu/presentation/pages/find_event/find_event_page.dart';
 import 'package:beluga_calendar/flows/menu/presentation/widgets/custom_menu_item.dart';
@@ -59,11 +60,18 @@ class MenuDrawer extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               CustomMenuItem(
-                itemText: 'Find Event',
-                iconPath: Assets.icons.searchIcon.path,
-                // TODO: go to FindEvent(mainPage?)
-                onTap: () => Routemaster.of(context).push(FindEventPage.path),
-              ),
+                  itemText: 'Find Event',
+                  iconPath: Assets.icons.searchIcon.path,
+                  // TODO: go to FindEvent(mainPage?)
+                  onTap: () async {
+                    final result = await Routemaster.of(context).push<bool>(FindEventPage.path).result;
+                    if (result ?? false) {
+                      context.read<MainPageCubit>().loadEvents(
+                        (context.read<AppStateCubit>().state as AuthorizedState)
+                            .user,
+                      );
+                    }
+                  }),
               const Spacer(),
               CustomMenuItem(
                 itemText: 'Log out',

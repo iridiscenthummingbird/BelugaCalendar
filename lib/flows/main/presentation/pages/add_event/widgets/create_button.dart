@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class CreateButton extends StatelessWidget {
   const CreateButton({
     required this.onPressed,
+    this.title = 'Create',
     super.key,
   });
 
   final VoidCallback onPressed;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class CreateButton extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 15),
               child: Text(
-                'Create',
+                title,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,

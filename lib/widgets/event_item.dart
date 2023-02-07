@@ -1,11 +1,14 @@
 import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
+import 'package:beluga_calendar/flows/main/presentation/pages/event/event_page.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:routemaster/routemaster.dart';
 
 class EventItem extends StatelessWidget {
   const EventItem({
     required this.title,
+    required this.id,
     required this.description,
     required this.category,
     required this.date,
@@ -13,6 +16,7 @@ class EventItem extends StatelessWidget {
     super.key,
   });
 
+  final String id;
   final String title;
   final String description;
   final Category category;
@@ -26,7 +30,18 @@ class EventItem extends StatelessWidget {
       shadowColor: Colors.grey.shade100,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          String path = Routemaster.of(context).currentRoute.path;
+          if (path == '/') {
+            path = '';
+          }
+          Routemaster.of(context).push(
+            path + EventPage.path,
+            queryParameters: {
+              'id': id,
+            },
+          );
+        },
         child: Ink(
           height: 140,
           decoration: BoxDecoration(
@@ -76,7 +91,9 @@ class EventItem extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
-                          color: Theme.of(context).primaryColorDark.withOpacity(0.7),
+                          color: Theme.of(context)
+                              .primaryColorDark
+                              .withOpacity(0.7),
                           height: 1.7,
                         ),
                         overflow: TextOverflow.ellipsis,

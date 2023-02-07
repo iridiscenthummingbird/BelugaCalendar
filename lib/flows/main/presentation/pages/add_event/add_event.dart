@@ -24,9 +24,9 @@ class AddEventPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create event'),
-        leading: InkWell(
-          onTap: () => Routemaster.of(context).pop(),
-          child: SvgPicture.asset(
+        leading: IconButton(
+          onPressed: () => Routemaster.of(context).pop(),
+          icon: SvgPicture.asset(
             Assets.icons.back.path,
             height: 24,
             width: 24,
@@ -223,6 +223,37 @@ class AddEventPage extends StatelessWidget {
                                           )
                                           .toList(),
                                     ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        if (state.file == null) {
+                                          addEventCubit.addFile(context);
+                                        } else {
+                                          addEventCubit.deleteFile();
+                                        }
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            state.file == null
+                                                ? Icons.file_upload
+                                                : Icons.delete,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            state.file == null
+                                                ? 'Pick file'
+                                                : 'Delete file',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                     const Spacer(),
                                     Padding(
                                       padding: const EdgeInsets.only(
@@ -234,13 +265,14 @@ class AddEventPage extends StatelessWidget {
                                           if (formState?.validate() ?? false) {
                                             if (state.selectedCategoryId !=
                                                 null) {
+                                              final user = ((context
+                                                          .read<AppStateCubit>()
+                                                          .state)
+                                                      as AuthorizedState)
+                                                  .user;
                                               addEventCubit.addEvent(
-                                                ownerId: ((context
-                                                            .read<AppStateCubit>()
-                                                            .state)
-                                                        as AuthorizedState)
-                                                    .user
-                                                    .id,
+                                                ownerId: user.id,
+                                                ownerEmail: user.email ?? '',
                                                 title: addEventCubit
                                                     .titleController.text,
                                                 description: addEventCubit

@@ -121,10 +121,11 @@ class Assets {
   static const SvgGenImage beluga = SvgGenImage('assets/beluga.svg');
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const AssetGenImage noEvents = AssetGenImage('assets/no_events.png');
   static const SvgGenImage uploadImage = SvgGenImage('assets/uploadImage.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [beluga, uploadImage];
+  List<dynamic> get values => [beluga, noEvents, uploadImage];
 }
 
 class AssetGenImage {

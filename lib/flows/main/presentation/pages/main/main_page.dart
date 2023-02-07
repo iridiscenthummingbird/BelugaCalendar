@@ -1,6 +1,7 @@
 import 'package:beluga_calendar/flows/main/presentation/pages/add_event/add_event.dart';
 import 'package:beluga_calendar/flows/main/presentation/pages/main/cubit/main_page_cubit.dart';
 import 'package:beluga_calendar/flows/main/presentation/pages/main/widgets/events_filter_button.dart';
+import 'package:beluga_calendar/flows/main/presentation/pages/main/widgets/no_events_banner.dart';
 import 'package:beluga_calendar/flows/menu/presentation/widgets/menu_drawer.dart';
 import 'package:beluga_calendar/gen/assets.gen.dart';
 import 'package:beluga_calendar/navigation/app_state_cubit/app_state_cubit.dart';
@@ -60,17 +61,53 @@ class MainPage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 24),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: state.events.length,
-                            itemBuilder: (context, index) {
-                              final event = state.events[index];
-                              if (state.selectedCategoryId.isNotEmpty) {
-                                if (event.category.id ==
-                                    state.selectedCategoryId) {
+                        if (state.selectedCategoryId.isNotEmpty) ...{
+                          if (state.events
+                              .where((e) =>
+                                  e.category.id == state.selectedCategoryId)
+                              .isNotEmpty) ...{
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: state.events.length,
+                                itemBuilder: (context, index) {
+                                  final event = state.events[index];
+                                  if (event.category.id ==
+                                      state.selectedCategoryId) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 16),
+                                      child: EventItem(
+                                        id: event.id,
+                                        title: event.title,
+                                        description:
+                                            event.description.isNotEmpty
+                                                ? event.description
+                                                : 'No description.',
+                                        category: event.category,
+                                        date: event.date,
+                                        time: event.time,
+                                      ),
+                                    );
+                                  }
+
+                                  return Container();
+                                },
+                              ),
+                            )
+                          } else ...{
+                            const NoEventsBanner(),
+                          }
+                        } else ...{
+                          if (state.events.isNotEmpty) ...{
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: state.events.length,
+                                itemBuilder: (context, index) {
+                                  final event = state.events[index];
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 16),
                                     child: EventItem(
+                                      id: event.id,
                                       title: event.title,
                                       description: event.description.isNotEmpty
                                           ? event.description
@@ -80,25 +117,13 @@ class MainPage extends StatelessWidget {
                                       time: event.time,
                                     ),
                                   );
-                                }
-                              } else {
-                                return Padding(
-                                    padding: const EdgeInsets.only(bottom: 16),
-                                    child: EventItem(
-                                      title: event.title,
-                                      description: event.description.isNotEmpty
-                                          ? event.description
-                                          : 'No description.',
-                                      category: event.category,
-                                      date: event.date,
-                                      time: event.time,
-                                    ),
-                                  );
-                              }
-                              return Container();
-                            },
-                          ),
-                        ),
+                                },
+                              ),
+                            ),
+                          } else ... {
+                            const NoEventsBanner(),
+                          }
+                        },
                       ],
                     ),
                   );
