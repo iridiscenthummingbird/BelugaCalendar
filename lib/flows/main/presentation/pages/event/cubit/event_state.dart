@@ -18,6 +18,8 @@ class EventLoaded extends EventState {
   List<Object> get props => [event];
 }
 
+class EventLeft extends EventState {}
+
 class EventError extends EventState {
   final Failure failure;
 

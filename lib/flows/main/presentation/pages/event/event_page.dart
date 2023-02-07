@@ -31,6 +31,9 @@ class EventPage extends StatelessWidget {
         builder: (context) {
           return BlocListener<EventCubit, EventState>(
             listener: (context, state) {
+              if (state is EventLeft) {
+                Routemaster.of(context).pop(true);
+              }
               if (state is EventError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -111,7 +114,16 @@ class EventPage extends StatelessWidget {
                           ),
                         } else ...{
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              final user = (context.read<AppStateCubit>().state
+                                      as AuthorizedState)
+                                  .user;
+                              await context.read<EventCubit>().leaveEvent(
+                                    eventId: eventId,
+                                    participantId: user.id,
+                                    participantEmail: user.email!,
+                                  );
+                            },
                             icon: Icon(
                               Icons.exit_to_app,
                               color: Theme.of(context).primaryColor,

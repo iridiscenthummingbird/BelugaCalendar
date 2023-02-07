@@ -23,6 +23,11 @@ abstract class EventsDataSourceI {
     required String participantId,
     required String participantEmail,
   });
+  Future<void> deleteParticipant({
+    required String eventId,
+    required String participantId,
+    required String participantEmail,
+  });
 
   Future<List<CategoryModel>> getCategories();
 }
@@ -119,6 +124,23 @@ class EventsDataSourceImpl implements EventsDataSourceI {
     try {
       return await firestoreEvents.addParticipant(
         shareCode: shareCode,
+        participantId: participantId,
+        participantEmail: participantEmail,
+      );
+    } catch (exception) {
+      throw ServerFailure(message: '$exception');
+    }
+  }
+
+  @override
+  Future<void> deleteParticipant({
+    required String eventId,
+    required String participantId,
+    required String participantEmail,
+  }) async {
+    try {
+      await firestoreEvents.deleteParticipant(
+        eventId: eventId,
         participantId: participantId,
         participantEmail: participantEmail,
       );

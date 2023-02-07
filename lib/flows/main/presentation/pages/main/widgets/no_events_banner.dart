@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 class NoEventsBanner extends StatelessWidget {
   const NoEventsBanner({
     Key? key,
+    required this.refresh,
   }) : super(key: key);
+
+  final void Function()? refresh;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,19 @@ class NoEventsBanner extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Theme.of(context).primaryColorDark.withOpacity(0.7),
+                      color:
+                          Theme.of(context).primaryColorDark.withOpacity(0.7),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: refresh,
+                    child: Text(
+                      'Click to refresh',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                   ),
                 ],

@@ -50,30 +50,6 @@ class CalendarPage extends StatelessWidget {
                               Theme.of(context).primaryTextTheme.displayLarge,
                         ),
                         const Spacer(),
-                        IconButton(
-                          //TODO
-                          onPressed: () {},
-                          splashRadius: 20,
-                          constraints: const BoxConstraints(),
-                          iconSize: 24,
-                          padding: EdgeInsets.zero,
-                          icon: SvgPicture.asset(
-                            Assets.icons.dandruffIcon.path,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        IconButton(
-                          //TODO
-                          onPressed: () {},
-                          constraints: const BoxConstraints(),
-                          splashRadius: 20,
-                          iconSize: 24,
-                          padding: EdgeInsets.zero,
-                          icon: SvgPicture.asset(
-                            Assets.icons.moreDotsIcon.path,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
                       ],
                     ),
                     Expanded(

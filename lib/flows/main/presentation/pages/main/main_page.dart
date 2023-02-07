@@ -20,10 +20,9 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = (context.read<AppStateCubit>().state as AuthorizedState).user;
     return BlocProvider(
-      create: (context) => getIt<MainPageCubit>()
-        ..loadEvents(
-            (context.read<AppStateCubit>().state as AuthorizedState).user),
+      create: (context) => getIt<MainPageCubit>()..loadEvents(user),
       child: Builder(builder: (context) {
         return Scaffold(
           drawer: const MenuDrawer(),
@@ -67,12 +66,64 @@ class MainPage extends StatelessWidget {
                                   e.category.id == state.selectedCategoryId)
                               .isNotEmpty) ...{
                             Expanded(
-                              child: ListView.builder(
-                                itemCount: state.events.length,
-                                itemBuilder: (context, index) {
-                                  final event = state.events[index];
-                                  if (event.category.id ==
-                                      state.selectedCategoryId) {
+                              child: RefreshIndicator(
+                                onRefresh: () async {
+                                  await context
+                                      .read<MainPageCubit>()
+                                      .getUsersEvents(user);
+                                },
+                                color: Theme.of(context).primaryColor,
+                                child: ListView.builder(
+                                  itemCount: state.events.length,
+                                  itemBuilder: (context, index) {
+                                    final event = state.events[index];
+                                    if (event.category.id ==
+                                        state.selectedCategoryId) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 16),
+                                        child: EventItem(
+                                          id: event.id,
+                                          title: event.title,
+                                          description:
+                                              event.description.isNotEmpty
+                                                  ? event.description
+                                                  : 'No description.',
+                                          category: event.category,
+                                          date: event.date,
+                                          time: event.time,
+                                        ),
+                                      );
+                                    }
+
+                                    return Container();
+                                  },
+                                ),
+                              ),
+                            )
+                          } else ...{
+                            NoEventsBanner(
+                              refresh: () async {
+                                await context
+                                    .read<MainPageCubit>()
+                                    .loadEvents(user);
+                              },
+                            ),
+                          }
+                        } else ...{
+                          if (state.events.isNotEmpty) ...{
+                            Expanded(
+                              child: RefreshIndicator(
+                                onRefresh: () async {
+                                  await context
+                                      .read<MainPageCubit>()
+                                      .getUsersEvents(user);
+                                },
+                                color: Theme.of(context).primaryColor,
+                                child: ListView.builder(
+                                  itemCount: state.events.length,
+                                  itemBuilder: (context, index) {
+                                    final event = state.events[index];
                                     return Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 16),
@@ -88,40 +139,18 @@ class MainPage extends StatelessWidget {
                                         time: event.time,
                                       ),
                                     );
-                                  }
-
-                                  return Container();
-                                },
-                              ),
-                            )
-                          } else ...{
-                            const NoEventsBanner(),
-                          }
-                        } else ...{
-                          if (state.events.isNotEmpty) ...{
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: state.events.length,
-                                itemBuilder: (context, index) {
-                                  final event = state.events[index];
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 16),
-                                    child: EventItem(
-                                      id: event.id,
-                                      title: event.title,
-                                      description: event.description.isNotEmpty
-                                          ? event.description
-                                          : 'No description.',
-                                      category: event.category,
-                                      date: event.date,
-                                      time: event.time,
-                                    ),
-                                  );
-                                },
+                                  },
+                                ),
                               ),
                             ),
-                          } else ... {
-                            const NoEventsBanner(),
+                          } else ...{
+                            NoEventsBanner(
+                              refresh: () async {
+                                await context
+                                    .read<MainPageCubit>()
+                                    .loadEvents(user);
+                              },
+                            ),
                           }
                         },
                       ],
