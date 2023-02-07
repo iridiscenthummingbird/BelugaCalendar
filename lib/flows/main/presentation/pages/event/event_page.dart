@@ -73,15 +73,19 @@ class EventPage extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {
+                          onPressed: () async {
                             try {
-                              ContactService.saveContacts(
-                                  event.participantsEmails);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Contacts saved successfully!'),
-                                ),
-                              );
+                              final hasSaved =
+                                  await ContactService.saveContacts(
+                                      event.participantsEmails);
+                              if (hasSaved) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Contacts saved successfully!'),
+                                  ),
+                                );
+                              }
                             } catch (_) {}
                           },
                           icon: Icon(

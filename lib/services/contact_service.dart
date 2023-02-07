@@ -1,7 +1,7 @@
 import 'package:flutter_contacts/flutter_contacts.dart';
 
 class ContactService {
-  static Future<void> saveContacts(List<String> emails) async {
+  static Future<bool> saveContacts(List<String> emails) async {
     if (await FlutterContacts.requestPermission()) {
       emails = emails.toSet().toList();
 
@@ -34,6 +34,9 @@ class ContactService {
           await newContact.insert();
         }
       }
+      return true;
+    } else {
+      return false;
     }
   }
 }
