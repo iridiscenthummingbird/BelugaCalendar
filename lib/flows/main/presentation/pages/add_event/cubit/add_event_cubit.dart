@@ -4,7 +4,6 @@ import 'package:beluga_calendar/domain/core/errors/failures.dart';
 import 'package:beluga_calendar/domain/core/usecase/usecase.dart';
 import 'package:beluga_calendar/flows/main/domain/entities/category.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/add_event.dart';
-import 'package:beluga_calendar/services/add_to_calendar_service.dart';
 import 'package:beluga_calendar/flows/main/domain/usecases/get_categories.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
@@ -115,7 +114,6 @@ class AddEventCubit extends Cubit<AddEventState> {
         );
       },
       (eventsList) {
-        AddToCalendarService.addToCalendar(event);
         emit(const AddEventSuccess());
       },
     );

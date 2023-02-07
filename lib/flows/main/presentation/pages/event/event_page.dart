@@ -60,6 +60,17 @@ class EventPage extends StatelessWidget {
                       actions: [
                         IconButton(
                           onPressed: () {
+                            context
+                                .read<EventCubit>()
+                                .addToNativeCalendar(state.event);
+                          },
+                          icon: Icon(
+                            Icons.calendar_month,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
                             try {
                               ContactService.saveContacts(
                                   event.participantsEmails);

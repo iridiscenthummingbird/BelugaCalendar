@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../../../domain/shared_models/api/user_model.dart';
+import '../../../../../../services/add_to_calendar_service.dart';
 
 part 'event_state.dart';
 
@@ -30,5 +31,9 @@ class EventCubit extends Cubit<EventState> {
         emit(EventLoaded(event));
       },
     );
+  }
+
+  void addToNativeCalendar(Event event) {
+    AddToCalendarService.addToCalendar(event);
   }
 }
